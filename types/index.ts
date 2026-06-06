@@ -1,3 +1,10 @@
+export interface FormationConfig {
+  name: string;
+  label: string;
+  players: Player[];
+  posLabels: { text: string; y: number }[];
+}
+
 export interface Player {
   id: string;
   name: string;

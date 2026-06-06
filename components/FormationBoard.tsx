@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FORMATION, BENCH_PLAYERS } from '@/lib/data';
+import { FORMATIONS, BENCH_PLAYERS } from '@/lib/data';
 import type { Player } from '@/types';
 
 const PITCH_W = 600;
@@ -33,9 +33,12 @@ const playerVariants = {
 };
 
 export default function FormationBoard() {
+  const [activeFormation, setActiveFormation] = useState(0);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  const currentFormation = FORMATIONS[activeFormation];
 
   const handleMouseEnter = (player: Player) => {
     if (!svgRef.current || !containerRef.current) return;
@@ -58,13 +61,30 @@ export default function FormationBoard() {
     <section id="formation" className="py-16 bg-[#080f0a]">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">
             SQUAD FORMATION
           </h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
-            4 — 3 — 3 TACTICAL LINEUP
+            {currentFormation.label} TACTICAL LINEUP
           </p>
+        </div>
+
+        {/* Formation selector */}
+        <div className="flex justify-center gap-2 mb-10 flex-wrap">
+          {FORMATIONS.map((f, i) => (
+            <button
+              key={f.name}
+              onClick={() => { setActiveFormation(i); setTooltip(null); }}
+              className={`px-5 py-1.5 rounded-full border font-bebas tracking-widest text-sm transition-all duration-200 ${
+                i === activeFormation
+                  ? 'border-[#f5c518] text-[#f5c518] bg-[#f5c518]/10'
+                  : 'border-white/20 text-white/50 hover:border-white/40 hover:text-white/80'
+              }`}
+            >
+              {f.name}
+            </button>
+          ))}
         </div>
 
         {/* Pitch + tooltip wrapper */}
@@ -130,14 +150,15 @@ export default function FormationBoard() {
             <path d={`M 18 ${PITCH_H - 38} A 18 18 0 0 0 36 ${PITCH_H - 18}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
             <path d={`M ${PITCH_W - 36} ${PITCH_H - 18} A 18 18 0 0 0 ${PITCH_W - 18} ${PITCH_H - 38}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
-            {/* Player nodes */}
+            {/* Player nodes — re-keyed on formation change to replay stagger animation */}
             <motion.g
+              key={activeFormation}
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.1 }}
             >
-              {FORMATION.map((player) => (
+              {currentFormation.players.map((player) => (
                 <motion.g
                   key={player.id}
                   variants={playerVariants}
@@ -199,11 +220,12 @@ export default function FormationBoard() {
               ))}
             </motion.g>
 
-            {/* Position labels */}
-            <text x="26" y="820" fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">GK</text>
-            <text x="26" y="640" fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">DEF</text>
-            <text x="26" y="460" fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">MID</text>
-            <text x="26" y="255" fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">FWD</text>
+            {/* Dynamic position labels from formation config */}
+            {currentFormation.posLabels.map(({ text, y }) => (
+              <text key={`${text}-${y}`} x="26" y={y} fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">
+                {text}
+              </text>
+            ))}
           </svg>
 
           {/* Tooltip */}

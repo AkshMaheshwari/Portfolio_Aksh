@@ -36,7 +36,7 @@ export default function Home() {
       <Hero />
 
       <div className="section-divider">
-        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">4-3-3 FORMATION</span>
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TACTICAL FORMATION</span>
       </div>
 
       <FormationBoard />
