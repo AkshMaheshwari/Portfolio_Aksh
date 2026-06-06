@@ -2,10 +2,30 @@ import { Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import FormationBoard from '@/components/FormationBoard';
+import Achievements from '@/components/Achievements';
 import SeasonStats from '@/components/SeasonStats';
 import Roster from '@/components/Roster';
 import TransferTimeline from '@/components/TransferTimeline';
 import Footer from '@/components/Footer';
+
+function HonoursSkeleton() {
+  return (
+    <section id="honours" className="py-16 bg-[#080f0a]">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <div className="h-20 w-96 bg-[#0d1f14] rounded mx-auto mb-4 animate-pulse" />
+          <div className="h-4 w-64 bg-[#0d1f14] rounded mx-auto animate-pulse" />
+        </div>
+        <div className="h-48 bg-[#0d1f14] border border-[#ffffff10] rounded-2xl animate-pulse mb-8 max-w-3xl mx-auto" />
+        <div className="grid grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-64 bg-[#0d1f14] border border-[#ffffff10] rounded-xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function StatsSkeleton() {
   return (
@@ -40,6 +60,14 @@ export default function Home() {
       </div>
 
       <FormationBoard />
+
+      <div className="section-divider">
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">HONOURS BOARD</span>
+      </div>
+
+      <Suspense fallback={<HonoursSkeleton />}>
+        <Achievements />
+      </Suspense>
 
       <div className="section-divider">
         <span className="text-[#f5c518] font-bebas tracking-widest text-sm">SEASON STATS</span>

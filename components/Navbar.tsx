@@ -7,6 +7,7 @@ import { PERSONAL } from '@/lib/data';
 const NAV_LINKS = [
   { label: 'PITCH', href: '#hero' },
   { label: 'FORMATION', href: '#formation' },
+  { label: 'HONOURS', href: '#honours' },
   { label: 'STATS', href: '#stats' },
   { label: 'ROSTER', href: '#roster' },
   { label: 'CAREER', href: '#career' },

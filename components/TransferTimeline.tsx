@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Image from 'next/image';
 import { TIMELINE } from '@/lib/data';
 import type { TransferEntry } from '@/types';
 
@@ -11,13 +12,42 @@ const transferBadgeStyle: Record<TransferEntry['transferType'], { bg: string; te
   'FREE TRANSFER': { bg: '#4ade8020', text: '#4ade80', border: '#4ade8040' },
 };
 
+// ── Club badge: shows logo if logoUrl is set, falls back to initials ──────────
+function ClubBadge({ entry }: { entry: TransferEntry }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const showLogo = !!entry.logoUrl && !imgFailed;
+
+  return (
+    <div
+      className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 font-bebas text-lg tracking-wider flex-shrink-0${entry.isCurrent ? ' shadow-lg' : ''}`}
+      style={{
+        backgroundColor: '#0d1f14',
+        borderColor: entry.color,
+        boxShadow: entry.isCurrent ? `0 0 20px ${entry.color}60` : undefined,
+      }}
+    >
+      {showLogo ? (
+        <Image
+          src={entry.logoUrl!}
+          alt={`${entry.club} logo`}
+          width={48}
+          height={48}
+          className="w-10 h-10 object-contain"
+          onError={() => setImgFailed(true)}
+        />
+      ) : (
+        <span style={{ color: entry.color }}>{entry.initials}</span>
+      )}
+    </div>
+  );
+}
+
 interface TimelineEntryProps {
   entry: TransferEntry;
   index: number;
-  isLast: boolean;
 }
 
-function TimelineEntry({ entry, index, isLast }: TimelineEntryProps) {
+function TimelineEntry({ entry, index }: TimelineEntryProps) {
   const badge = transferBadgeStyle[entry.transferType];
 
   return (
@@ -28,21 +58,9 @@ function TimelineEntry({ entry, index, isLast }: TimelineEntryProps) {
       transition={{ delay: index * 0.15, type: 'spring', stiffness: 80 }}
       className="relative flex gap-6 pb-10"
     >
-      {/* Club badge */}
+      {/* Club badge — z-10 keeps it in front of the timeline line */}
       <div className="relative z-10 flex-shrink-0">
-        <div
-          className={`w-16 h-16 rounded-full flex items-center justify-center font-bebas text-lg tracking-wider border-2 ${
-            entry.isCurrent ? 'shadow-lg' : ''
-          }`}
-          style={{
-            backgroundColor: entry.color + '20',
-            borderColor: entry.color,
-            color: entry.color,
-            boxShadow: entry.isCurrent ? `0 0 20px ${entry.color}60` : undefined,
-          }}
-        >
-          {entry.initials}
-        </div>
+        <ClubBadge entry={entry} />
         {entry.isCurrent && (
           <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#f5c518] flex items-center justify-center">
             <div className="w-2 h-2 rounded-full bg-[#080f0a]" />
@@ -117,8 +135,14 @@ export default function TransferTimeline() {
 
         {/* Timeline */}
         <div className="relative pl-4">
-          {/* Animated vertical line */}
-          <div className="absolute left-11 top-0 bottom-0 w-px bg-[#ffffff10] overflow-hidden" ref={lineRef}>
+          {/*
+            Line is at left-12 (48px) = padding(16px) + half badge(32px),
+            which centres it on the 64px (w-16) circle badges.
+          */}
+          <div
+            className="absolute left-12 top-0 bottom-0 w-px bg-[#ffffff10] overflow-hidden"
+            ref={lineRef}
+          >
             <motion.div
               className="w-full bg-gradient-to-b from-[#f5c518] to-[#4ade80]"
               initial={{ height: 0 }}
@@ -132,7 +156,6 @@ export default function TransferTimeline() {
               key={entry.club}
               entry={entry}
               index={i}
-              isLast={i === TIMELINE.length - 1}
             />
           ))}
         </div>

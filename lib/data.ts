@@ -31,7 +31,7 @@ const S: Record<string, SkillBase> = {
   api:    { id: 'mid2', name: 'REST & OAuth', rating: 87, icon: 'API',  experience: 3, role: 'REST API design, Google OAuth, secure auth flows, integration patterns' },
   prisma: { id: 'mid3', name: 'Prisma',       rating: 82, icon: 'Pr',   experience: 1, role: 'Type-safe ORM, schema-first migrations, used in Syncifi' },
   js:     { id: 'fwd1', name: 'JavaScript',   rating: 90, icon: 'JS',   experience: 4, role: 'Full-stack JS, async/await, browser APIs, event-driven patterns' },
-  cpp:    { id: 'fwd2', name: 'C++  (CP)',    rating: 86, icon: 'C++',  experience: 4, role: 'Competitive programming, DSA, algorithms — ICPC AIR 250 Asia West' },
+  cpp:    { id: 'fwd2', name: 'C++  (CP)',    rating: 86, icon: 'C++',  experience: 4, role: 'Competitive programming, DSA, algorithms — ICPC AIR 251 Asia West' },
   tw:     { id: 'fwd3', name: 'Tailwind CSS', rating: 83, icon: 'TW',   experience: 2, role: 'Rapid responsive UI, dark themes, component design systems' },
 };
 
@@ -190,10 +190,16 @@ export const PROJECTS: Project[] = [
 
 // ─── TRANSFER TIMELINE ────────────────────────────────────────────────────────
 
+// ─── LOGO INSTRUCTIONS ───────────────────────────────────────────────────────
+// Drop logo files into /public/logos/ and set logoUrl below.
+// Recommended: square PNG/SVG, at least 80×80px, transparent background.
+// Leave logoUrl undefined to show the initials badge as fallback.
+
 export const TIMELINE: TransferEntry[] = [
   {
     club: 'Free Agent',
     initials: 'FA',
+    // logoUrl: '/logos/free-agent.png',
     color: '#f5c518',
     role: 'Full Stack Developer — Open to Opportunities',
     startYear: 'Feb 2026',
@@ -205,6 +211,7 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'MyEzz',
     initials: 'ME',
+    // logoUrl: '/logos/myezz.png',
     color: '#4ade80',
     role: 'Full Stack Developer Intern',
     startYear: 'Nov 2025',
@@ -216,6 +223,7 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'WE DISTRICT',
     initials: 'WD',
+    // logoUrl: '/logos/we-district.png',
     color: '#60a5fa',
     role: 'Full Stack Developer Intern',
     startYear: 'Dec 2025',
@@ -227,6 +235,7 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'Credence HR Services',
     initials: 'CR',
+    // logoUrl: '/logos/credence.png',
     color: '#a78bfa',
     role: 'Research Intern',
     startYear: 'May 2025',
@@ -238,12 +247,13 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'K.J. Somaiya College',
     initials: 'KJ',
+    // logoUrl: '/logos/kj-somaiya.png',
     color: '#f97316',
     role: 'B.Tech Computer Engineering — CGPA 9.5',
     startYear: 'Jul 2023',
     endYear: 'May 2027',
     transferType: 'PERMANENT',
     isCurrent: false,
-    skillNote: 'Foundation: DSA, OOP, algorithms, OS — ICPC AIR 250 Asia West, CodeChef 3★ (1605)',
+    skillNote: 'Foundation: DSA, OOP, algorithms, OS — ICPC AIR 251 Asia West, CodeChef 3★ (1605)',
   },
 ];
