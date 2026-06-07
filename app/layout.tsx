@@ -16,8 +16,47 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Aksh Maheshwari — Full Stack Developer',
-  description: 'Portfolio of Aksh Maheshwari, Full Stack Developer. #10.',
+  title: {
+    default: 'Aksh Maheshwari — Full Stack Developer',
+    template: '%s | Aksh Maheshwari',
+  },
+  description:
+    'Aksh Maheshwari — Full Stack Developer from India. Building with Next.js, React, Node.js, Supabase and more. ICPC Asia West AIR 251. Open to internship & full-time roles.',
+  keywords: [
+    'Aksh Maheshwari',
+    'Full Stack Developer',
+    'Next.js',
+    'React',
+    'Node.js',
+    'Portfolio',
+    'ICPC',
+    'India',
+    'Wiglo.ai',
+    'Software Engineer',
+  ],
+  authors: [{ name: 'Aksh Maheshwari', url: 'https://github.com/AkshMaheshwari' }],
+  creator: 'Aksh Maheshwari',
+  metadataBase: new URL('https://akshmaheshwari.com'),
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    title: 'Aksh Maheshwari — Full Stack Developer',
+    description:
+      'Full Stack Developer building with Next.js, React, Supabase & Node.js. ICPC Asia West AIR 251. Check out my projects and career journey.',
+    siteName: 'Aksh Maheshwari Portfolio',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Aksh Maheshwari — Full Stack Developer',
+    description:
+      'Full Stack Developer building with Next.js, React, Supabase & Node.js. ICPC Asia West AIR 251.',
+    creator: '@AkshMaheshwari',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
