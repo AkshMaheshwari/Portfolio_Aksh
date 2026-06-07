@@ -40,20 +40,32 @@ export default function FormationBoard() {
 
   const currentFormation = FORMATIONS[activeFormation];
 
-  const handleMouseEnter = (player: Player) => {
+  const calcTooltipPos = (player: Player) => {
     if (!svgRef.current || !containerRef.current) return;
     const svgRect = svgRef.current.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
     const scaleX = svgRect.width / PITCH_W;
     const scaleY = svgRect.height / PITCH_H;
+    const rawX = svgRect.left - containerRect.left + player.x * scaleX;
+    const clampedX = Math.min(Math.max(rawX, 100), containerRect.width - 100);
     setTooltip({
       player,
-      x: svgRect.left - containerRect.left + player.x * scaleX,
+      x: clampedX,
       y: svgRect.top - containerRect.top + player.y * scaleY,
     });
   };
 
+  const handleMouseEnter = (player: Player) => calcTooltipPos(player);
   const handleMouseLeave = () => setTooltip(null);
+
+  const handleNodeClick = (e: React.MouseEvent, player: Player) => {
+    e.stopPropagation();
+    if (tooltip?.player.id === player.id) {
+      setTooltip(null);
+    } else {
+      calcTooltipPos(player);
+    }
+  };
 
   const ratingColor = (r: number) => (r >= 90 ? '#f5c518' : r >= 85 ? '#4ade80' : '#60a5fa');
 
@@ -88,7 +100,7 @@ export default function FormationBoard() {
         </div>
 
         {/* Pitch + tooltip wrapper */}
-        <div ref={containerRef} className="relative max-w-lg mx-auto">
+        <div ref={containerRef} className="relative max-w-lg mx-auto" onClick={() => setTooltip(null)}>
           <svg
             ref={svgRef}
             viewBox={`0 0 ${PITCH_W} ${PITCH_H}`}
@@ -106,6 +118,14 @@ export default function FormationBoard() {
               <pattern id="pitchStripe" x="0" y="0" width={PITCH_W} height="96" patternUnits="userSpaceOnUse">
                 <rect x="0" y="0" width={PITCH_W} height="48" fill="rgba(0,0,0,0.07)" />
               </pattern>
+              {/* Per-player clip paths — keyed to activeFormation so they move with formation changes */}
+              {currentFormation.players.map((player) =>
+                player.iconUrl ? (
+                  <clipPath key={`clip-${player.id}-${activeFormation}`} id={`clip-${player.id}`}>
+                    <circle cx={player.x} cy={player.y} r="28" />
+                  </clipPath>
+                ) : null
+              )}
             </defs>
 
             {/* Pitch background */}
@@ -164,54 +184,55 @@ export default function FormationBoard() {
                   variants={playerVariants}
                   onMouseEnter={() => handleMouseEnter(player)}
                   onMouseLeave={handleMouseLeave}
+                  onClick={(e) => handleNodeClick(e, player)}
                   style={{ cursor: 'pointer' }}
                 >
                   {/* Glow ring */}
                   <circle
                     cx={player.x}
                     cy={player.y}
-                    r="34"
+                    r="40"
                     fill="none"
                     stroke={ratingColor(player.rating)}
                     strokeWidth="1"
                     opacity="0.4"
                   />
                   {/* Main circle */}
-                  <circle cx={player.x} cy={player.y} r="28" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2" />
-                  <circle cx={player.x} cy={player.y} r="24" fill="#1a3a24" />
-                  {/* Icon text */}
-                  <text
-                    x={player.x}
-                    y={player.y - 5}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill={ratingColor(player.rating)}
-                    fontSize="11"
-                    fontWeight="bold"
-                    fontFamily="monospace"
-                  >
-                    {player.icon}
-                  </text>
-                  {/* Rating */}
-                  <text
-                    x={player.x}
-                    y={player.y + 10}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="rgba(255,255,255,0.75)"
-                    fontSize="9"
-                    fontFamily="monospace"
-                  >
-                    {player.rating}
-                  </text>
+                  <circle cx={player.x} cy={player.y} r="33" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2.5" />
+                  <circle cx={player.x} cy={player.y} r="28" fill="#1a3a24" />
+
+                  {player.iconUrl ? (
+                    <image
+                      href={player.iconUrl}
+                      x={player.x - 28}
+                      y={player.y - 28}
+                      width="56"
+                      height="56"
+                      clipPath={`url(#clip-${player.id})`}
+                    />
+                  ) : (
+                    <text
+                      x={player.x}
+                      y={player.y}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill={ratingColor(player.rating)}
+                      fontSize="14"
+                      fontWeight="bold"
+                      fontFamily="monospace"
+                    >
+                      {player.icon}
+                    </text>
+                  )}
+
                   {/* Name label */}
                   <text
                     x={player.x}
-                    y={player.y + 46}
+                    y={player.y + 52}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="rgba(255,255,255,0.9)"
-                    fontSize="10"
+                    fontSize="13"
                     fontFamily="Inter, sans-serif"
                   >
                     {player.name}
@@ -282,8 +303,12 @@ export default function FormationBoard() {
                 whileHover={{ scale: 1.05, borderColor: '#f5c518' }}
                 className="bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-4 text-center w-36 cursor-default transition-colors group"
               >
-                <div className="w-12 h-12 rounded-full bg-[#1a3a24] border-2 border-[#f5c518]/40 group-hover:border-[#f5c518] transition-colors flex items-center justify-center mx-auto mb-2">
-                  <span className="text-[#f5c518] text-xs font-mono font-bold">{player.icon}</span>
+                <div className="w-12 h-12 rounded-full bg-[#1a3a24] border-2 border-[#f5c518]/40 group-hover:border-[#f5c518] transition-colors flex items-center justify-center mx-auto mb-2 overflow-hidden">
+                  {player.iconUrl ? (
+                    <img src={player.iconUrl} alt={player.name} className="w-7 h-7 object-contain" />
+                  ) : (
+                    <span className="text-[#f5c518] text-xs font-mono font-bold">{player.icon}</span>
+                  )}
                 </div>
                 <div className="text-white text-xs font-semibold font-inter">{player.name}</div>
                 <div className="text-[#f5c518] text-xs font-mono mt-0.5">{player.rating}/100</div>

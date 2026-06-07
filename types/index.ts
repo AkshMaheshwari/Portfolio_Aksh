@@ -11,6 +11,7 @@ export interface Player {
   position: 'GK' | 'DEF' | 'MID' | 'FWD' | 'BENCH';
   rating: number;
   icon: string;
+  iconUrl?: string;
   experience: number;
   role: string;
   x: number;

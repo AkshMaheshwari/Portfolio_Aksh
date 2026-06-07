@@ -42,7 +42,7 @@ export default function Hero() {
       </div>
 
       {/* Main name */}
-      <h1 className="font-bebas text-[clamp(4rem,12vw,10rem)] leading-none tracking-tight text-white z-10 flex flex-wrap justify-center">
+      <h1 className="font-bebas text-[clamp(2.8rem,10vw,10rem)] leading-none tracking-tight text-white z-10 flex flex-wrap justify-center px-2">
         {nameLetters.map((letter, i) => (
           <motion.span
             key={i}
@@ -61,13 +61,13 @@ export default function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.0, type: 'spring', stiffness: 100 }}
-        className="z-10 mt-6 flex items-center gap-4"
+        className="z-10 mt-6 flex items-center gap-3 px-4"
       >
-        <div className="h-px w-12 bg-[#f5c518]" />
-        <span className="font-bebas text-[#f5c518] tracking-[0.3em] text-xl md:text-2xl">
+        <div className="h-px w-8 sm:w-12 bg-[#f5c518] shrink-0" />
+        <span className="font-bebas text-[#f5c518] tracking-[0.2em] sm:tracking-[0.3em] text-lg sm:text-xl md:text-2xl text-center">
           #{PERSONAL.jerseyNumber} — {PERSONAL.role.toUpperCase()}
         </span>
-        <div className="h-px w-12 bg-[#f5c518]" />
+        <div className="h-px w-8 sm:w-12 bg-[#f5c518] shrink-0" />
       </motion.div>
 
       {/* Sub-info row */}
@@ -75,7 +75,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="z-10 mt-4 flex items-center gap-4 text-white/50 font-inter text-sm"
+        className="z-10 mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-white/50 font-inter text-sm px-6 text-center"
       >
         <span>{PERSONAL.nationality}</span>
         <span className="text-[#f5c518]">·</span>

@@ -70,12 +70,8 @@ export default function Footer() {
         <div className="h-px bg-[#ffffff10] mb-8 max-w-sm mx-auto" />
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-white/30 text-xs font-inter">
-          <span>© {year} {PERSONAL.name}</span>
-          <span className="hidden sm:block">·</span>
-          <span>Built with Next.js 14 + Framer Motion</span>
-          <span className="hidden sm:block">·</span>
-          <span className="text-[#f5c518]/50">⚽ Footballer Theme</span>
+        <div className="text-white/30 text-xs font-inter">
+          © {year} {PERSONAL.name}
         </div>
       </div>
     </footer>

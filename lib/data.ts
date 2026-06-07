@@ -1,5 +1,8 @@
 import type { Player, FormationConfig, Project, TransferEntry } from '@/types';
 
+const DI = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
+const SI = 'https://cdn.simpleicons.org';
+
 export const PERSONAL = {
   name: 'Aksh Maheshwari',
   firstName: 'Aksh',
@@ -22,17 +25,17 @@ function pos(base: SkillBase, position: Player['position'], x: number, y: number
 }
 
 const S: Record<string, SkillBase> = {
-  nextjs: { id: 'gk',   name: 'Next.js',     rating: 92, icon: 'Nx',   experience: 3, role: 'Primary framework — SSR, App Router, server actions, full-stack across all projects' },
-  nodejs: { id: 'def1', name: 'Node.js',      rating: 85, icon: 'Node', experience: 3, role: 'Server-side runtime, Express APIs, MERN stack backbone' },
-  mongo:  { id: 'def2', name: 'MongoDB',      rating: 83, icon: 'MDB',  experience: 2, role: 'NoSQL document modeling, aggregations, MERN stack DB layer' },
-  fire:   { id: 'def3', name: 'Firebase',     rating: 84, icon: 'Fire', experience: 2, role: 'Real-time DB, cloud auth, storage — used in ZeroPlate' },
-  supa:   { id: 'def4', name: 'Supabase',     rating: 86, icon: 'Supa', experience: 2, role: 'Postgres BaaS, realtime, Row Level Security — Syncifi & WE DISTRICT' },
-  react:  { id: 'mid1', name: 'React',        rating: 91, icon: 'Re',   experience: 3, role: 'Component architecture, hooks, context — used across every project' },
-  api:    { id: 'mid2', name: 'REST & OAuth', rating: 87, icon: 'API',  experience: 3, role: 'REST API design, Google OAuth, secure auth flows, integration patterns' },
-  prisma: { id: 'mid3', name: 'Prisma',       rating: 82, icon: 'Pr',   experience: 1, role: 'Type-safe ORM, schema-first migrations, used in Syncifi' },
-  js:     { id: 'fwd1', name: 'JavaScript',   rating: 90, icon: 'JS',   experience: 4, role: 'Full-stack JS, async/await, browser APIs, event-driven patterns' },
-  cpp:    { id: 'fwd2', name: 'C++  (CP)',    rating: 86, icon: 'C++',  experience: 4, role: 'Competitive programming, DSA, algorithms — ICPC AIR 251 Asia West' },
-  tw:     { id: 'fwd3', name: 'Tailwind CSS', rating: 83, icon: 'TW',   experience: 2, role: 'Rapid responsive UI, dark themes, component design systems' },
+  nextjs: { id: 'gk',   name: 'Next.js',     rating: 92, icon: 'Nx',   iconUrl: `${DI}/nextjs/nextjs-plain.svg`,             experience: 3, role: 'Primary framework — SSR, App Router, server actions, full-stack across all projects' },
+  nodejs: { id: 'def1', name: 'Node.js',      rating: 85, icon: 'Node', iconUrl: `${DI}/nodejs/nodejs-original.svg`,          experience: 3, role: 'Server-side runtime, Express APIs, MERN stack backbone' },
+  mongo:  { id: 'def2', name: 'MongoDB',      rating: 83, icon: 'MDB',  iconUrl: `${DI}/mongodb/mongodb-original.svg`,        experience: 2, role: 'NoSQL document modeling, aggregations, MERN stack DB layer' },
+  fire:   { id: 'def3', name: 'Firebase',     rating: 84, icon: 'Fire', iconUrl: `${DI}/firebase/firebase-original.svg`,      experience: 2, role: 'Real-time DB, cloud auth, storage — used in ZeroPlate' },
+  supa:   { id: 'def4', name: 'Supabase',     rating: 86, icon: 'Supa', iconUrl: `${SI}/supabase/3ECF8E`,                     experience: 2, role: 'Postgres BaaS, realtime, Row Level Security — Syncifi & WE DISTRICT' },
+  react:  { id: 'mid1', name: 'React',        rating: 91, icon: 'Re',   iconUrl: `${DI}/react/react-original.svg`,            experience: 3, role: 'Component architecture, hooks, context — used across every project' },
+  api:    { id: 'mid2', name: 'REST & OAuth', rating: 87, icon: 'API',                                                        experience: 3, role: 'REST API design, Google OAuth, secure auth flows, integration patterns' },
+  prisma: { id: 'mid3', name: 'Prisma',       rating: 82, icon: 'Pr',   iconUrl: `${SI}/prisma/A0AEC0`,                      experience: 1, role: 'Type-safe ORM, schema-first migrations, used in Syncifi' },
+  js:     { id: 'fwd1', name: 'JavaScript',   rating: 90, icon: 'JS',   iconUrl: `${DI}/javascript/javascript-original.svg`, experience: 4, role: 'Full-stack JS, async/await, browser APIs, event-driven patterns' },
+  cpp:    { id: 'fwd2', name: 'C++  (CP)',    rating: 86, icon: 'C++',  iconUrl: `${DI}/cplusplus/cplusplus-original.svg`,   experience: 4, role: 'Competitive programming, DSA, algorithms — ICPC AIR 251 Asia West' },
+  tw:     { id: 'fwd3', name: 'Tailwind CSS', rating: 83, icon: 'TW',   iconUrl: `${DI}/tailwindcss/tailwindcss-original.svg`, experience: 2, role: 'Rapid responsive UI, dark themes, component design systems' },
 };
 
 // ─── FORMATIONS ──────────────────────────────────────────────────────────────
@@ -100,6 +103,7 @@ export const BENCH_PLAYERS: Player[] = [
     position: 'BENCH',
     rating: 78,
     icon: 'Py',
+    iconUrl: `${DI}/python/python-original.svg`,
     experience: 3,
     role: 'Scripting, data processing, ML basics',
     x: 0,
@@ -111,6 +115,7 @@ export const BENCH_PLAYERS: Player[] = [
     position: 'BENCH',
     rating: 75,
     icon: 'Dock',
+    iconUrl: `${DI}/docker/docker-original.svg`,
     experience: 1,
     role: 'Containerization, dev environments',
     x: 0,
@@ -122,6 +127,7 @@ export const BENCH_PLAYERS: Player[] = [
     position: 'BENCH',
     rating: 76,
     icon: 'Java',
+    iconUrl: `${DI}/java/java-original.svg`,
     experience: 2,
     role: 'OOP fundamentals, coursework, DSA',
     x: 0,
@@ -133,6 +139,7 @@ export const BENCH_PLAYERS: Player[] = [
     position: 'BENCH',
     rating: 74,
     icon: 'Rp',
+    iconUrl: `${SI}/razorpay/3395FF`,
     experience: 1,
     role: 'Payment integration, webhooks — PawPal',
     x: 0,
@@ -153,8 +160,8 @@ export const PROJECTS: Project[] = [
     description:
       'AI-assisted productivity platform that syncs Gmail emails with Google Calendar workflows. Extracts deadlines from email threads via a queue-based approval system.',
     highlights: ['Gmail ↔ Calendar Sync', 'Google OAuth', 'Queue Approval System', 'Duplicate Prevention'],
-    liveUrl: '#',        // ← add your demo link
-    githubUrl: '#',      // ← add your GitHub repo link
+    liveUrl: 'https://syncifi.tech',
+    githubUrl: '#',
     techCount: 5,
     complexity: 'Elite',
   },
@@ -167,7 +174,7 @@ export const PROJECTS: Project[] = [
     description:
       'Food waste management platform with real-time analytics, NGO coordination, and location-based NGO discovery to efficiently redistribute surplus food.',
     highlights: ['Real-time Analytics', 'NGO Discovery', 'Voice Feedback', 'Geolocation API'],
-    liveUrl: '#',
+    liveUrl: 'https://zeroplate.vercel.app',
     githubUrl: '#',
     techCount: 4,
     complexity: 'Professional',
@@ -181,7 +188,7 @@ export const PROJECTS: Project[] = [
     description:
       'Pet adoption platform with role-based dashboards for users and animal shelters. Secure Razorpay donation flow, advanced listing filters, and application tracking.',
     highlights: ['Razorpay Payments', 'Role-based Dashboards', 'Advanced Filters', 'Application Tracking'],
-    liveUrl: '#',
+    liveUrl: 'https://pawpal-psi.vercel.app',
     githubUrl: '#',
     techCount: 5,
     complexity: 'Professional',
@@ -245,7 +252,7 @@ export const TIMELINE: TransferEntry[] = [
     skillNote: 'Built: InductX onboarding workflows, PlayFab gamification, HR-aligned journey research',
   },
   {
-    club: 'K.J. Somaiya College',
+    club: 'K.J. Somaiya College of Engineering',
     initials: 'KJ',
     // logoUrl: '/logos/kj-somaiya.png',
     color: '#f97316',

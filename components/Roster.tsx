@@ -1,17 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { PROJECTS } from '@/lib/data';
 import type { Project } from '@/types';
-
-const complexityColor: Record<Project['complexity'], string> = {
-  Amateur: '#6b7280',
-  'Semi-Pro': '#60a5fa',
-  Professional: '#4ade80',
-  Elite: '#f59e0b',
-  'World Class': '#f5c518',
-};
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -27,6 +19,17 @@ function StarRating({ count }: { count: number }) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [flipped, setFlipped] = useState(false);
+  const hoverCapable = useRef<boolean | null>(null);
+
+  const isHoverDevice = () => {
+    if (hoverCapable.current === null) {
+      hoverCapable.current =
+        typeof window !== 'undefined'
+          ? window.matchMedia('(hover: hover) and (pointer: fine)').matches
+          : true;
+    }
+    return hoverCapable.current;
+  };
 
   return (
     <motion.div
@@ -35,9 +38,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true, margin: '-60px' }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 80 }}
       className="card-3d-wrapper"
-      style={{ height: '340px' }}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
+      onMouseEnter={() => { if (isHoverDevice()) setFlipped(true); }}
+      onMouseLeave={() => { if (isHoverDevice()) setFlipped(false); }}
+      onClick={() => { if (!isHoverDevice()) setFlipped(v => !v); }}
     >
       <motion.div
         className="card-3d-inner"
@@ -47,23 +50,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {/* Front */}
         <div className="card-face w-full h-full bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-6 flex flex-col hover:border-[#f5c518]/40 transition-colors cursor-pointer">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="font-bebas text-2xl text-white tracking-wide leading-none mb-1">
-                {project.name}
-              </div>
-              <div className="font-inter text-xs text-[#f5c518] tracking-wide">{project.role}</div>
+          <div className="mb-4">
+            <div className="font-bebas text-2xl text-white tracking-wide leading-none mb-1">
+              {project.name}
             </div>
-            <div
-              className="px-2 py-1 rounded text-xs font-semibold font-mono"
-              style={{
-                color: complexityColor[project.complexity],
-                background: complexityColor[project.complexity] + '20',
-                border: `1px solid ${complexityColor[project.complexity]}40`,
-              }}
-            >
-              {project.complexity.toUpperCase()}
-            </div>
+            <div className="font-inter text-xs text-[#f5c518] tracking-wide">{project.role}</div>
           </div>
 
           {/* Stars */}
@@ -85,7 +76,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           {/* Footer */}
           <div className="mt-4 pt-4 border-t border-[#ffffff10] flex items-center justify-between">
-            <span className="text-white/30 text-xs font-inter">Hover to flip</span>
+            <span className="text-white/30 text-xs font-inter hidden sm:block">Hover to flip</span>
+            <span className="text-white/30 text-xs font-inter sm:hidden">Tap to flip</span>
             <span className="text-white/30 text-xs font-mono">{project.techCount} techs</span>
           </div>
         </div>
@@ -110,21 +102,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             ))}
           </div>
 
-          {/* Stats row */}
-          <div className="flex gap-4 my-3 py-3 border-y border-[#ffffff10]">
-            <div className="text-center">
-              <div className="font-bebas text-xl text-white">{project.techCount}</div>
-              <div className="text-white/40 text-xs">Techs</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bebas text-xl text-white">{project.stars}</div>
-              <div className="text-white/40 text-xs">Stars</div>
-            </div>
-            <div className="text-center flex-1">
-              <div className="font-bebas text-sm leading-tight" style={{ color: complexityColor[project.complexity] }}>
-                {project.complexity}
-              </div>
-              <div className="text-white/40 text-xs">Level</div>
+          {/* Tech stack */}
+          <div className="mt-3 pt-3 border-t border-[#ffffff18]">
+            <div className="font-mono text-[10px] text-white/30 tracking-widest mb-2">BUILT WITH</div>
+            <div className="flex flex-wrap gap-1.5">
+              {project.techStack.map((tech) => (
+                <span
+                  key={tech}
+                  className="px-2 py-0.5 bg-[#f5c518]/10 border border-[#f5c518]/25 rounded text-[#f5c518]/80 text-xs font-mono"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
 

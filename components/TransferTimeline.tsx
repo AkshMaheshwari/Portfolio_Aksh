@@ -70,33 +70,30 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        {/* Club + dates row */}
-        <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-          <div>
-            <div
-              className="font-bebas text-2xl tracking-wide leading-none"
-              style={{ color: entry.isCurrent ? '#f5c518' : 'white' }}
-            >
-              {entry.club}
-              {entry.isCurrent && (
-                <span className="ml-2 text-sm text-[#f5c518]/60 font-inter normal-case">
-                  ← Current
-                </span>
-              )}
-            </div>
-            <div className="font-inter text-white/60 text-sm mt-0.5">{entry.role}</div>
-          </div>
-          <div className="text-right flex-shrink-0">
-            <div className="font-mono text-white/50 text-sm">
-              {entry.startYear} — {entry.endYear}
-            </div>
-            <div
-              className="mt-1 px-2 py-0.5 rounded text-xs font-semibold font-mono inline-block"
-              style={{ background: badge.bg, color: badge.text, border: `1px solid ${badge.border}` }}
-            >
-              {entry.transferType}
-            </div>
-          </div>
+        {/* Club name */}
+        <div
+          className="font-bebas text-xl sm:text-2xl tracking-wide leading-none mb-0.5"
+          style={{ color: entry.isCurrent ? '#f5c518' : 'white' }}
+        >
+          {entry.club}
+          {entry.isCurrent && (
+            <span className="ml-2 text-xs sm:text-sm text-[#f5c518]/60 font-inter normal-case">
+              ← Current
+            </span>
+          )}
+        </div>
+
+        {/* Role + date + badge all inline */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
+          <span className="font-inter text-white/60 text-sm">{entry.role}</span>
+          <span className="text-white/20 hidden sm:inline">·</span>
+          <span className="font-mono text-white/40 text-xs">{entry.startYear} — {entry.endYear}</span>
+          <span
+            className="px-2 py-0.5 rounded text-xs font-semibold font-mono"
+            style={{ background: badge.bg, color: badge.text, border: `1px solid ${badge.border}` }}
+          >
+            {entry.transferType}
+          </span>
         </div>
 
         {/* Skill note */}

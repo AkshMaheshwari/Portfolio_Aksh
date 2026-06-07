@@ -46,16 +46,16 @@ export default async function SeasonStats() {
         </div>
 
         {/* Scoreboard bar */}
-        <div className="flex items-center justify-between bg-[#0d1f14] border border-[#ffffff18] rounded-xl px-6 py-4 mb-8 max-w-2xl mx-auto">
-          <div className="text-left">
+        <div className="flex flex-col sm:flex-row items-center sm:justify-between bg-[#0d1f14] border border-[#ffffff18] rounded-xl px-6 py-4 mb-8 max-w-2xl mx-auto gap-4 sm:gap-0 divide-y sm:divide-y-0 divide-[#ffffff10]">
+          <div className="text-center sm:text-left w-full sm:w-auto pt-0">
             <div className="font-bebas text-xs text-[#f5c518]/60 tracking-widest">PLAYER</div>
             <div className="font-bebas text-xl text-white tracking-wide">{PERSONAL.name.toUpperCase()}</div>
           </div>
-          <div className="text-center">
+          <div className="text-center w-full sm:w-auto py-2 sm:py-0">
             <div className="font-bebas text-xs text-[#f5c518]/60 tracking-widest">POSITION</div>
             <div className="font-bebas text-xl text-[#f5c518]">#{PERSONAL.jerseyNumber}</div>
           </div>
-          <div className="text-right">
+          <div className="text-center sm:text-right w-full sm:w-auto pb-0">
             <div className="font-bebas text-xs text-[#f5c518]/60 tracking-widest">SEASON</div>
             <div className="font-bebas text-xl text-white">
               {stats.proSince}–{new Date().getFullYear()}

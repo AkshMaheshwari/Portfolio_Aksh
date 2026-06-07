@@ -7,6 +7,7 @@ import SeasonStats from '@/components/SeasonStats';
 import Roster from '@/components/Roster';
 import TransferTimeline from '@/components/TransferTimeline';
 import Footer from '@/components/Footer';
+import DugoutTerminal from '@/components/DugoutTerminal';
 
 function HonoursSkeleton() {
   return (
@@ -90,6 +91,7 @@ export default function Home() {
       <TransferTimeline />
 
       <Footer />
+      <DugoutTerminal />
     </main>
   );
 }
