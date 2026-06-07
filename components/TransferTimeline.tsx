@@ -6,12 +6,6 @@ import Image from 'next/image';
 import { TIMELINE } from '@/lib/data';
 import type { TransferEntry } from '@/types';
 
-const transferBadgeStyle: Record<TransferEntry['transferType'], { bg: string; text: string; border: string }> = {
-  PERMANENT: { bg: '#f5c51820', text: '#f5c518', border: '#f5c51840' },
-  LOAN: { bg: '#60a5fa20', text: '#60a5fa', border: '#60a5fa40' },
-  'FREE TRANSFER': { bg: '#4ade8020', text: '#4ade80', border: '#4ade8040' },
-};
-
 // ── Club badge: shows logo if logoUrl is set, falls back to initials ──────────
 function ClubBadge({ entry }: { entry: TransferEntry }) {
   const [imgFailed, setImgFailed] = useState(false);
@@ -30,9 +24,14 @@ function ClubBadge({ entry }: { entry: TransferEntry }) {
         <Image
           src={entry.logoUrl!}
           alt={`${entry.club} logo`}
-          width={48}
-          height={48}
-          className="w-10 h-10 object-contain"
+          width={64}
+          height={64}
+          className={`object-${entry.logoFit ?? 'contain'} ${
+            entry.logoFit === 'cover' ? 'w-full h-full'
+            : entry.logoSize === 'lg' ? 'w-12 h-12'
+            : entry.logoSize === 'sm' ? 'w-8 h-8'
+            : 'w-10 h-10'
+          }`}
           onError={() => setImgFailed(true)}
         />
       ) : (
@@ -48,8 +47,6 @@ interface TimelineEntryProps {
 }
 
 function TimelineEntry({ entry, index }: TimelineEntryProps) {
-  const badge = transferBadgeStyle[entry.transferType];
-
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
@@ -86,14 +83,7 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
         {/* Role + date + badge all inline */}
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
           <span className="font-inter text-white/60 text-sm">{entry.role}</span>
-          <span className="text-white/20 hidden sm:inline">·</span>
           <span className="font-mono text-white/40 text-xs">{entry.startYear} — {entry.endYear}</span>
-          <span
-            className="px-2 py-0.5 rounded text-xs font-semibold font-mono"
-            style={{ background: badge.bg, color: badge.text, border: `1px solid ${badge.border}` }}
-          >
-            {entry.transferType}
-          </span>
         </div>
 
         {/* Skill note */}
@@ -122,12 +112,6 @@ export default function TransferTimeline() {
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
             CAREER TIMELINE
           </p>
-        </div>
-
-        {/* Transfer window marker */}
-        <div className="flex items-center gap-3 mb-8 px-4 py-3 bg-[#f5c518]/10 border border-[#f5c518]/30 rounded-xl max-w-sm mx-auto text-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-[#f5c518] animate-pulse" />
-          <span className="font-bebas text-[#f5c518] tracking-widest">TRANSFER WINDOW OPEN</span>
         </div>
 
         {/* Timeline */}

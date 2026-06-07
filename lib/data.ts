@@ -10,9 +10,9 @@ export const PERSONAL = {
   github: 'AkshMaheshwari',         // ← update to your exact GitHub username
   role: 'Full Stack Developer',
   jerseyNumber: 10,
-  club: 'Free Agent',
+  club: 'Wiglo.ai',
   nationality: 'India',
-  openToWork: true,
+  openToWork: false,
 };
 
 // ─── SKILL POOL ──────────────────────────────────────────────────────────────
@@ -204,21 +204,21 @@ export const PROJECTS: Project[] = [
 
 export const TIMELINE: TransferEntry[] = [
   {
-    club: 'Free Agent',
-    initials: 'FA',
-    // logoUrl: '/logos/free-agent.png',
-    color: '#f5c518',
-    role: 'Full Stack Developer — Open to Opportunities',
-    startYear: 'Feb 2026',
+    club: 'Wiglo.ai',
+    initials: 'WG',
+    // logoUrl: '/logos/wiglo.png',
+    color: '#a78bfa',
+    role: 'Full Stack Developer Intern',
+    startYear: 'Jun 2026',
     endYear: 'Present',
-    transferType: 'FREE TRANSFER',
+    transferType: 'PERMANENT',
     isCurrent: true,
-    skillNote: 'Building: personal projects, open-source contributions, seeking internship / full-time roles',
+    skillNote: 'Building: AI-powered product features, full-stack development, working with LLM integrations',
   },
   {
     club: 'MyEzz',
     initials: 'ME',
-    // logoUrl: '/logos/myezz.png',
+    logoUrl: '/logos/myezz.svg',
     color: '#4ade80',
     role: 'Full Stack Developer Intern',
     startYear: 'Nov 2025',
@@ -230,7 +230,8 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'WE DISTRICT',
     initials: 'WD',
-    // logoUrl: '/logos/we-district.png',
+    logoUrl: '/logos/we-district.png',
+    logoFit: 'cover',
     color: '#60a5fa',
     role: 'Full Stack Developer Intern',
     startYear: 'Dec 2025',
@@ -242,7 +243,8 @@ export const TIMELINE: TransferEntry[] = [
   {
     club: 'Credence HR Services',
     initials: 'CR',
-    // logoUrl: '/logos/credence.png',
+    logoUrl: '/logos/credence.svg',
+    logoSize: 'lg',
     color: '#a78bfa',
     role: 'Research Intern',
     startYear: 'May 2025',

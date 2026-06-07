@@ -109,7 +109,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               {project.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2 py-0.5 bg-[#f5c518]/10 border border-[#f5c518]/25 rounded text-[#f5c518]/80 text-xs font-mono"
+                  className="px-2 py-0.5 bg-[#f5c518]/10 border border-[#f5c518]/25 rounded text-[#f5c518]/80 text-xs font-mono mb-1"
                 >
                   {tech}
                 </span>

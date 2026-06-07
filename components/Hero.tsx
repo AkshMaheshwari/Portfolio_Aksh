@@ -3,8 +3,6 @@
 import { motion } from 'framer-motion';
 import { PERSONAL } from '@/lib/data';
 
-const CL_STARS = Array.from({ length: 8 });
-
 export default function Hero() {
   const nameLetters = PERSONAL.name.toUpperCase().split('');
 
@@ -26,20 +24,6 @@ export default function Hero() {
         <rect x="690" y="150" width="110" height="300" fill="none" stroke="white" strokeWidth="1.5" />
       </svg>
 
-      {/* Champions League star row */}
-      <div className="flex items-center gap-3 mb-10 z-10">
-        {CL_STARS.map((_, i) => (
-          <motion.span
-            key={i}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 + i * 0.07, type: 'spring', stiffness: 200 }}
-            className="text-[#f5c518] text-xl select-none"
-          >
-            ★
-          </motion.span>
-        ))}
-      </div>
 
       {/* Main name */}
       <h1 className="font-bebas text-[clamp(2.8rem,10vw,10rem)] leading-none tracking-tight text-white z-10 flex flex-wrap justify-center px-2">

@@ -35,7 +35,9 @@ export interface Project {
 export interface TransferEntry {
   club: string;
   initials: string;
-  logoUrl?: string;   // path relative to /public, e.g. '/logos/myezz.png'
+  logoUrl?: string;
+  logoFit?: 'cover' | 'contain';
+  logoSize?: 'sm' | 'md' | 'lg';
   color: string;
   role: string;
   startYear: string;
