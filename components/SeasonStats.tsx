@@ -1,6 +1,7 @@
 import { fetchGitHubStats } from '@/lib/github';
 import { PERSONAL } from '@/lib/data';
 import StatsGrid from './StatsGrid';
+import ContributionGraph from './ContributionGraph';
 
 function ErrorState() {
   return (
@@ -64,6 +65,7 @@ export default async function SeasonStats() {
         </div>
 
         <StatsGrid stats={stats} />
+        <ContributionGraph username={PERSONAL.github} />
       </div>
     </section>
   );

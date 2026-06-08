@@ -6,11 +6,11 @@ import { PERSONAL } from '@/lib/data';
 
 const NAV_LINKS = [
   { label: 'PITCH', href: '#hero' },
-  { label: 'FORMATION', href: '#formation' },
+  { label: 'CAREER', href: '#career' },
+  { label: 'ROSTER', href: '#roster' },
   { label: 'HONOURS', href: '#honours' },
   { label: 'STATS', href: '#stats' },
-  { label: 'ROSTER', href: '#roster' },
-  { label: 'CAREER', href: '#career' },
+  { label: 'FORMATION', href: '#formation' },
 ];
 
 export default function Navbar() {

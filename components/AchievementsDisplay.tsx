@@ -66,6 +66,13 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
   const [anthemPlaying, setAnthemPlaying] = useState(false);
 
   const handleTrophyClick = useCallback(() => {
+    if (anthemPlaying) {
+      uclAudio?.pause();
+      if (uclAudio) uclAudio.currentTime = 0;
+      setAnthemPlaying(false);
+      setTrophyClicks(0);
+      return;
+    }
     const next = trophyClicks + 1;
     setTrophyClicks(next);
     if (next >= 3) {
@@ -78,7 +85,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
         if (uclAudio) uclAudio.currentTime = 0;
       }, 10000);
     }
-  }, [trophyClicks]);
+  }, [trophyClicks, anthemPlaying]);
 
   return (
     <div className="space-y-8">
@@ -95,15 +102,29 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
 
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6">
           {/* Trophy icon — click 3× for UCL anthem */}
-          <div
-            onClick={handleTrophyClick}
-            className={`relative flex-shrink-0 w-20 h-20 rounded-2xl border-2 flex items-center justify-center text-4xl cursor-pointer select-none transition-all duration-300 ${
-              anthemPlaying
-                ? 'border-[#f5c518] bg-[#f5c518]/25 shadow-[0_0_32px_rgba(245,197,24,0.5)]'
-                : 'border-[#f5c518]/60 bg-[#f5c518]/10 hover:border-[#f5c518]/90 hover:bg-[#f5c518]/20'
-            }`}
-          >
-            <span className={anthemPlaying ? 'animate-bounce' : ''}>🏆</span>
+          <div className="relative flex-shrink-0">
+            <div
+              onClick={handleTrophyClick}
+              className={`relative w-20 h-20 rounded-2xl border-2 flex items-center justify-center text-4xl cursor-pointer select-none transition-all duration-300 ${
+                anthemPlaying
+                  ? 'border-[#f5c518] bg-[#f5c518]/25 shadow-[0_0_32px_rgba(245,197,24,0.5)]'
+                  : 'border-[#f5c518]/60 bg-[#f5c518]/10 hover:border-[#f5c518]/90 hover:bg-[#f5c518]/20'
+              }`}
+            >
+              <span className={anthemPlaying ? 'animate-bounce' : ''}>🏆</span>
+            </div>
+            {/* Easter egg hint */}
+            {!anthemPlaying && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, type: 'spring' }}
+                className="absolute -top-2 -right-2 flex items-center gap-1 bg-[#0d1f14] border border-[#f5c518]/40 rounded-full px-2 py-0.5 pointer-events-none"
+              >
+                <span className="text-[9px] font-mono text-[#f5c518]/70 tracking-wide">click me</span>
+                <span className="text-[10px]">✨</span>
+              </motion.div>
+            )}
           </div>
 
           {/* Champions toast */}

@@ -7,6 +7,28 @@ import { PERSONAL, PROJECTS, TIMELINE } from '@/lib/data';
 type LineType = 'input' | 'output' | 'system';
 interface Line { type: LineType; content: string }
 
+const ROAST_LIMIT = 5;
+const ROAST_KEY = 'dugout_roast_usage';
+
+function getToday() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function getRoastCount(): number {
+  try {
+    const raw = localStorage.getItem(ROAST_KEY);
+    if (!raw) return 0;
+    const { count, date } = JSON.parse(raw);
+    return date === getToday() ? count : 0;
+  } catch { return 0; }
+}
+
+function incrementRoastCount(): number {
+  const count = getRoastCount() + 1;
+  localStorage.setItem(ROAST_KEY, JSON.stringify({ count, date: getToday() }));
+  return ROAST_LIMIT - count;
+}
+
 const BOOT: string[] = [
   '╔══════════════════════════════════════════╗',
   '║       DUGOUT CONSOLE  v1.0               ║',
@@ -184,7 +206,7 @@ export default function DugoutTerminal() {
     BOOT.map((content) => ({ type: 'system' as LineType, content }))
   );
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
-  const [histIdx, setHistIdx] = useState(-1);
+  const [, setHistIdx] = useState(-1);
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -241,6 +263,18 @@ export default function DugoutTerminal() {
         ]);
         return;
       }
+      // Client-side rate limit check (persists across server restarts)
+      if (getRoastCount() >= ROAST_LIMIT) {
+        setLines((prev) => [
+          ...prev,
+          { type: 'input', content: cmd },
+          { type: 'output', content: '' },
+          { type: 'output', content: `  ⛔  Daily scouting limit reached (${ROAST_LIMIT}/day). Come back tomorrow.` },
+          { type: 'output', content: '' },
+        ]);
+        return;
+      }
+
       setLines((prev) => [
         ...prev,
         { type: 'input', content: cmd },
@@ -263,6 +297,7 @@ export default function DugoutTerminal() {
           ]);
           return;
         }
+        const remaining = incrementRoastCount();
         const roastLines = (data.roast as string)
           .split('\n')
           .filter(Boolean)
@@ -271,7 +306,7 @@ export default function DugoutTerminal() {
           ...prev,
           { type: 'output', content: '  ── SCOUTING REPORT ──────────────────' },
           ...roastLines.map((content: string) => ({ type: 'output' as LineType, content })),
-          { type: 'output', content: `  [${data.remaining ?? 0} scouting report${data.remaining === 1 ? '' : 's'} remaining today]` },
+          { type: 'output', content: `  [${remaining} scouting report${remaining === 1 ? '' : 's'} remaining today]` },
           { type: 'output', content: '' },
         ]);
       } catch {
