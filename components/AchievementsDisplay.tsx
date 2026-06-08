@@ -72,11 +72,11 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
       setTrophyClicks(0);
       setAnthemPlaying(true);
       playUCLAnthem();
+      setTimeout(() => setAnthemPlaying(false), 3500);
       setTimeout(() => {
-        setAnthemPlaying(false);
         uclAudio?.pause();
         if (uclAudio) uclAudio.currentTime = 0;
-      }, 3500);
+      }, 10000);
     }
   }, [trophyClicks]);
 

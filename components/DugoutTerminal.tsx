@@ -37,6 +37,7 @@ function run(cmd: string): string[] {
         '  clear              Clear the terminal',
         '  exit               Close the console',
         '  hint               ...',
+        '  roast [club]       Get a club roasted by AI',
         '',
       ];
 
@@ -218,13 +219,70 @@ export default function DugoutTerminal() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  const submit = useCallback(() => {
+  const submit = useCallback(async () => {
     const cmd = input.trim();
     if (!cmd) return;
 
     setCmdHistory((h) => [cmd, ...h]);
     setHistIdx(-1);
     setInput('');
+
+    // Async roast command
+    if (cmd.toLowerCase().startsWith('roast')) {
+      const team = cmd.slice(5).trim();
+      if (!team) {
+        setLines((prev) => [
+          ...prev,
+          { type: 'input', content: cmd },
+          { type: 'output', content: '' },
+          { type: 'output', content: '  Usage: roast [club name]' },
+          { type: 'output', content: '  e.g.   roast Manchester United' },
+          { type: 'output', content: '' },
+        ]);
+        return;
+      }
+      setLines((prev) => [
+        ...prev,
+        { type: 'input', content: cmd },
+        { type: 'output', content: '' },
+        { type: 'output', content: `  ⚽ Fetching intel on ${team}...` },
+        { type: 'output', content: '' },
+      ]);
+      try {
+        const res = await fetch('/api/roast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ team }),
+        });
+        const data = await res.json();
+        if (res.status === 429) {
+          setLines((prev) => [
+            ...prev,
+            { type: 'output', content: `  ⛔  ${data.error}` },
+            { type: 'output', content: '' },
+          ]);
+          return;
+        }
+        const roastLines = (data.roast as string)
+          .split('\n')
+          .filter(Boolean)
+          .map((l: string) => `  ${l}`);
+        setLines((prev) => [
+          ...prev,
+          { type: 'output', content: '  ── SCOUTING REPORT ──────────────────' },
+          ...roastLines.map((content: string) => ({ type: 'output' as LineType, content })),
+          { type: 'output', content: `  [${data.remaining ?? 0} scouting report${data.remaining === 1 ? '' : 's'} remaining today]` },
+          { type: 'output', content: '' },
+        ]);
+      } catch {
+        setLines((prev) => [
+          ...prev,
+          { type: 'output', content: '  Scout failed to file the report. Try again.' },
+          { type: 'output', content: '' },
+        ]);
+      }
+      return;
+    }
 
     const output = run(cmd);
 
