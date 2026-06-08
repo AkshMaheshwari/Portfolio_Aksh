@@ -36,6 +36,7 @@ function run(cmd: string): string[] {
         '  contact            Get in touch',
         '  clear              Clear the terminal',
         '  exit               Close the console',
+        '  hint               ...',
         '',
       ];
 
@@ -143,6 +144,22 @@ function run(cmd: string): string[] {
         '',
       ];
 
+    case 'hint':
+      return [
+        '',
+        '  ⚽  CLASSIFIED INTEL',
+        '  ───────────────────────────────────────',
+        '  The crowd goes wild for one word.',
+        '  Four letters. The kind that shakes a stadium.',
+        '  Type it — anywhere on the page. Or right here.',
+        '',
+        '  [ ACCESS LEVEL: SUPERFAN ]',
+        '',
+      ];
+
+    case 'goal':
+      return ['__GOLAZO__'];
+
     case 'clear':
       return ['__CLEAR__'];
 
@@ -217,6 +234,10 @@ export default function DugoutTerminal() {
     }
     if (output[0] === '__EXIT__') {
       setOpen(false);
+      return;
+    }
+    if (output[0] === '__GOLAZO__') {
+      window.dispatchEvent(new CustomEvent('golazo'));
       return;
     }
 

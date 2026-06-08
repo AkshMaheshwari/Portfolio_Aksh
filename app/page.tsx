@@ -8,6 +8,7 @@ import Roster from '@/components/Roster';
 import TransferTimeline from '@/components/TransferTimeline';
 import Footer from '@/components/Footer';
 import DugoutTerminal from '@/components/DugoutTerminal';
+import GolazoEasterEgg from '@/components/GolazoEasterEgg';
 
 function HonoursSkeleton() {
   return (
@@ -57,10 +58,16 @@ export default function Home() {
       <Hero />
 
       <div className="section-divider">
-        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TACTICAL FORMATION</span>
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TRANSFER HISTORY</span>
       </div>
 
-      <FormationBoard />
+      <TransferTimeline />
+
+      <div className="section-divider">
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">SQUAD ROSTER</span>
+      </div>
+
+      <Roster />
 
       <div className="section-divider">
         <span className="text-[#f5c518] font-bebas tracking-widest text-sm">HONOURS BOARD</span>
@@ -79,19 +86,14 @@ export default function Home() {
       </Suspense>
 
       <div className="section-divider">
-        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">SQUAD ROSTER</span>
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TACTICAL FORMATION</span>
       </div>
 
-      <Roster />
-
-      <div className="section-divider">
-        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TRANSFER HISTORY</span>
-      </div>
-
-      <TransferTimeline />
+      <FormationBoard />
 
       <Footer />
       <DugoutTerminal />
+      <GolazoEasterEgg />
     </main>
   );
 }

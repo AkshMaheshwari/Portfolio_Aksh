@@ -1,7 +1,19 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { CFStats, LCStats } from '@/lib/competitive';
+
+let uclAudio: HTMLAudioElement | null = null;
+
+function playUCLAnthem() {
+  if (!uclAudio) {
+    uclAudio = new Audio('/ucl-anthem.mp3');
+    uclAudio.volume = 0.75;
+  }
+  uclAudio.currentTime = 0;
+  uclAudio.play().catch(() => {});
+}
 
 interface Props {
   cf: CFStats | null;
@@ -50,6 +62,24 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
   const cfPct = cf ? Math.min((cf.rating / 2800) * 100, 100) : 0;
   const lcMax = lc ? Math.max(lc.easySolved, lc.mediumSolved, 1) : 1;
 
+  const [trophyClicks, setTrophyClicks] = useState(0);
+  const [anthemPlaying, setAnthemPlaying] = useState(false);
+
+  const handleTrophyClick = useCallback(() => {
+    const next = trophyClicks + 1;
+    setTrophyClicks(next);
+    if (next >= 3) {
+      setTrophyClicks(0);
+      setAnthemPlaying(true);
+      playUCLAnthem();
+      setTimeout(() => {
+        setAnthemPlaying(false);
+        uclAudio?.pause();
+        if (uclAudio) uclAudio.currentTime = 0;
+      }, 3500);
+    }
+  }, [trophyClicks]);
+
   return (
     <div className="space-y-8">
 
@@ -64,10 +94,31 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
         </div>
 
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6">
-          {/* Trophy icon */}
-          <div className="flex-shrink-0 w-20 h-20 rounded-2xl border-2 border-[#f5c518]/60 bg-[#f5c518]/10 flex items-center justify-center text-4xl">
-            🏆
+          {/* Trophy icon — click 3× for UCL anthem */}
+          <div
+            onClick={handleTrophyClick}
+            className={`relative flex-shrink-0 w-20 h-20 rounded-2xl border-2 flex items-center justify-center text-4xl cursor-pointer select-none transition-all duration-300 ${
+              anthemPlaying
+                ? 'border-[#f5c518] bg-[#f5c518]/25 shadow-[0_0_32px_rgba(245,197,24,0.5)]'
+                : 'border-[#f5c518]/60 bg-[#f5c518]/10 hover:border-[#f5c518]/90 hover:bg-[#f5c518]/20'
+            }`}
+          >
+            <span className={anthemPlaying ? 'animate-bounce' : ''}>🏆</span>
           </div>
+
+          {/* Champions toast */}
+          <AnimatePresence>
+            {anthemPlaying && (
+              <motion.div
+                initial={{ opacity: 0, y: -12, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                className="absolute top-2 left-2 bg-[#0d1f14] border border-[#f5c518]/60 rounded-lg px-3 py-1.5 pointer-events-none shadow-xl"
+              >
+                <span className="font-bebas text-[#f5c518] tracking-widest text-sm">🎺 THE CHAMPIONS</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Details */}
           <div className="flex-1 min-w-0">
