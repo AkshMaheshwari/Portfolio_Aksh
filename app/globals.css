@@ -54,6 +54,21 @@ body {
   );
 }
 
+/* Alternate section background — faint grass glow from the top */
+.section-glow {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(29, 104, 48, 0.22) 0%, transparent 60%),
+    #080f0a;
+}
+
+/* Big Bebas headings — subtle vertical fade for depth */
+.heading-gradient {
+  background: linear-gradient(to bottom, #ffffff 50%, rgba(255, 255, 255, 0.55));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .section-divider {
   width: 100%;
   display: flex;

@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: 'HONOURS', href: '#honours' },
   { label: 'STATS', href: '#stats' },
   { label: 'FORMATION', href: '#formation' },
+  { label: 'CONTACT', href: '#contact' },
 ];
 
 export default function Navbar() {
@@ -79,8 +80,18 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right: clock + badge */}
+          {/* Right: team sheet + clock + badge */}
           <div className="hidden md:flex items-center gap-3">
+            <motion.a
+              href={PERSONAL.cvUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileTap={{ scale: 0.93, y: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+              className="px-4 py-1.5 bg-[#f5c518] text-[#080f0a] font-bebas tracking-widest text-sm rounded hover:bg-[#ffd84d] transition-colors"
+            >
+              📋 TEAM SHEET
+            </motion.a>
             <span className="font-mono text-xs text-white/40 tabular-nums">{clock}</span>
             {PERSONAL.openToWork ? (
               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-xs font-semibold animate-pulse_green">
@@ -136,7 +147,16 @@ export default function Navbar() {
                 {link.label}
               </motion.a>
             ))}
-            <div className="mt-6 flex flex-col items-center gap-2">
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <a
+                href={PERSONAL.cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="px-6 py-2.5 bg-[#f5c518] text-[#080f0a] font-bebas tracking-widest text-lg rounded active:scale-95 transition-transform"
+              >
+                📋 TEAM SHEET
+              </a>
               <span className="font-mono text-white/40 text-sm tabular-nums">{clock}</span>
               {PERSONAL.openToWork ? (
                 <span className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-sm font-semibold">

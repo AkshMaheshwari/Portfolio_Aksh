@@ -11,7 +11,7 @@ export default async function Achievements() {
     <section id="honours" className="py-16 bg-[#080f0a]">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">
+          <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">
             HONOURS BOARD
           </h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">

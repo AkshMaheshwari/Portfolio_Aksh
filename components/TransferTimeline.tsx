@@ -106,7 +106,7 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
       <motion.div variants={badgeVariants} className="relative z-10 flex-shrink-0">
         <ClubBadge entry={entry} />
         {entry.isCurrent && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#f5c518] flex items-center justify-center">
+          <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 flex items-center justify-center">
             <div className="w-2 h-2 rounded-full bg-[#080f0a]" />
           </div>
         )}
@@ -118,11 +118,11 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
           {/* Club name */}
           <div
             className="font-bebas text-xl sm:text-2xl tracking-wide leading-none mb-0.5"
-            style={{ color: entry.isCurrent ? '#f5c518' : 'white' }}
+            style={{ color: entry.isCurrent ? '#4ade80' : 'white' }}
           >
             {entry.club}
             {entry.isCurrent && (
-              <span className="ml-2 text-xs sm:text-sm text-[#f5c518]/60 font-inter normal-case">
+              <span className="ml-2 text-xs sm:text-sm text-green-400/60 font-inter normal-case">
                 ← Current
               </span>
             )}
@@ -155,7 +155,7 @@ export default function TransferTimeline() {
     <section id="career" className="py-16 bg-[#080f0a]">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-14">
-          <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">
+          <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">
             TRANSFER HISTORY
           </h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">

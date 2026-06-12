@@ -9,6 +9,8 @@ import TransferTimeline from '@/components/TransferTimeline';
 import Footer from '@/components/Footer';
 import DugoutTerminal from '@/components/DugoutTerminal';
 import GolazoEasterEgg from '@/components/GolazoEasterEgg';
+import PackOpening from '@/components/PackOpening';
+import Contact from '@/components/Contact';
 
 // Pure-CSS bouncing ball — safe in server components, animations live in globals.css
 function BallLoader({ label }: { label: string }) {
@@ -67,6 +69,7 @@ function StatsSkeleton() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-pitch">
+      <PackOpening />
       <Navbar />
       <Hero />
 
@@ -103,6 +106,12 @@ export default function Home() {
       </div>
 
       <FormationBoard />
+
+      <div className="section-divider">
+        <span className="text-[#f5c518] font-bebas tracking-widest text-sm">TRANSFER ENQUIRIES</span>
+      </div>
+
+      <Contact />
 
       <Footer />
       <DugoutTerminal />

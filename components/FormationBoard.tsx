@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, useInView, useReducedMotion, useMotionValue, animate } from 'framer-motion';
 import { FORMATIONS, BENCH_PLAYERS } from '@/lib/data';
 import type { Player } from '@/types';
 
@@ -24,6 +24,113 @@ const positionLabel: Record<Player['position'], string> = {
   FWD: 'Forward',
   BENCH: 'Bench',
 };
+
+const ratingColor = (r: number) => (r >= 90 ? '#f5c518' : r >= 85 ? '#4ade80' : '#60a5fa');
+
+const POSITION_SPRING = { type: 'spring' as const, stiffness: 60, damping: 13, mass: 0.9 };
+
+const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+
+interface PlayerNodeProps {
+  player: Player;
+  index: number;
+  inView: boolean;
+  reducedMotion: boolean;
+  svgRef: React.RefObject<SVGSVGElement>;
+  onHover: (p: Player) => void;
+  onLeave: () => void;
+  onSelect: (e: React.MouseEvent, p: Player) => void;
+}
+
+/*
+  Position + drag are driven by motion values set directly from pointer events,
+  so dragging never re-renders React and never goes through Framer's (SVG-
+  unsupported) drag gesture. Pointer deltas are converted from screen px to
+  viewBox units before applying.
+*/
+function PlayerNode({ player, index, inView, reducedMotion, svgRef, onHover, onLeave, onSelect }: PlayerNodeProps) {
+  const x = useMotionValue(player.x);
+  const y = useMotionValue(player.y);
+  const scale = useMotionValue(1);
+  const dragging = useRef(false);
+  const moved = useRef(false);
+  const start = useRef({ px: 0, py: 0, x: 0, y: 0 });
+
+  // Run to the new formation spot when x/y props change
+  useEffect(() => {
+    if (dragging.current) return;
+    const t = reducedMotion ? { duration: 0 } : POSITION_SPRING;
+    const ax = animate(x, player.x, t);
+    const ay = animate(y, player.y, t);
+    return () => { ax.stop(); ay.stop(); };
+  }, [player.x, player.y, reducedMotion, x, y]);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragging.current = true;
+    moved.current = false;
+    (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    start.current = { px: e.clientX, py: e.clientY, x: x.get(), y: y.get() };
+    onLeave();
+    if (!reducedMotion) animate(scale, 1.12, { duration: 0.15 });
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragging.current || !svgRef.current) return;
+    const pxPerUnit = svgRef.current.getBoundingClientRect().width / PITCH_W;
+    const dx = (e.clientX - start.current.px) / pxPerUnit;
+    const dy = (e.clientY - start.current.py) / pxPerUnit;
+    if (Math.abs(dx) + Math.abs(dy) > 4) moved.current = true;
+    x.set(clamp(start.current.x + dx, 40, PITCH_W - 40));
+    y.set(clamp(start.current.y + dy, 40, PITCH_H - 40));
+  };
+
+  const onPointerUp = () => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    const t = reducedMotion ? { duration: 0 } : POSITION_SPRING;
+    animate(x, player.x, t);
+    animate(y, player.y, t);
+    animate(scale, 1, { duration: 0.15 });
+  };
+
+  return (
+    <motion.g
+      style={{ x, y, scale, cursor: 'grab', touchAction: 'none' }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onMouseEnter={() => { if (!dragging.current) onHover(player); }}
+      onMouseLeave={onLeave}
+      onClick={(e) => { if (!moved.current) onSelect(e, player); }}
+    >
+      <motion.g
+        initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
+        animate={inView ? { opacity: 1, scale: 1 } : undefined}
+        transition={{ delay: PLAYER_DELAY + index * 0.07, type: 'spring', stiffness: 180, damping: 14 }}
+      >
+        {/* Glow ring */}
+        <circle cx="0" cy="0" r="40" fill="none" stroke={ratingColor(player.rating)} strokeWidth="1" opacity="0.4" />
+        {/* Main circle */}
+        <circle cx="0" cy="0" r="33" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2.5" />
+        <circle cx="0" cy="0" r="28" fill="#1a3a24" />
+
+        {player.iconUrl ? (
+          <image href={player.iconUrl} x="-28" y="-28" width="56" height="56" clipPath={`url(#clip-${player.id})`} />
+        ) : (
+          <text x="0" y="0" textAnchor="middle" dominantBaseline="middle" fill={ratingColor(player.rating)} fontSize="14" fontWeight="bold" fontFamily="monospace">
+            {player.icon}
+          </text>
+        )}
+
+        {/* Name label */}
+        <text x="0" y="52" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.9)" fontSize="13" fontFamily="Inter, sans-serif">
+          {player.name}
+        </text>
+      </motion.g>
+    </motion.g>
+  );
+}
 
 export default function FormationBoard() {
   const [activeFormation, setActiveFormation] = useState(0);
@@ -62,8 +169,6 @@ export default function FormationBoard() {
     }
   };
 
-  const ratingColor = (r: number) => (r >= 90 ? '#f5c518' : r >= 85 ? '#4ade80' : '#60a5fa');
-
   // Stroke markings "paint on" via pathLength; opacity snaps in at each delay
   const draw = (delay: number) =>
     reducedMotion
@@ -92,7 +197,7 @@ export default function FormationBoard() {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-6">
-          <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">
+          <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">
             SQUAD FORMATION
           </h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
@@ -194,85 +299,20 @@ export default function FormationBoard() {
             {/*
               Player nodes — keyed by stable player.id so formation changes spring
               each node from its old x/y to the new one (players "run" into place).
-              The outer <g> owns position, the inner <g> owns the entrance pop.
+              Draggable via pointer events; snaps back to position on release.
             */}
             {currentFormation.players.map((player, i) => (
-              <motion.g
+              <PlayerNode
                 key={player.id}
-                initial={false}
-                animate={{ x: player.x, y: player.y }}
-                transition={
-                  reducedMotion
-                    ? { duration: 0 }
-                    : { type: 'spring', stiffness: 60, damping: 13, mass: 0.9 }
-                }
-                onMouseEnter={() => handleMouseEnter(player)}
-                onMouseLeave={handleMouseLeave}
-                onClick={(e) => handleNodeClick(e, player)}
-                style={{ cursor: 'pointer' }}
-              >
-                <motion.g
-                  initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : undefined}
-                  transition={{
-                    delay: PLAYER_DELAY + i * 0.07,
-                    type: 'spring',
-                    stiffness: 180,
-                    damping: 14,
-                  }}
-                >
-                  {/* Glow ring */}
-                  <circle
-                    cx="0"
-                    cy="0"
-                    r="40"
-                    fill="none"
-                    stroke={ratingColor(player.rating)}
-                    strokeWidth="1"
-                    opacity="0.4"
-                  />
-                  {/* Main circle */}
-                  <circle cx="0" cy="0" r="33" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2.5" />
-                  <circle cx="0" cy="0" r="28" fill="#1a3a24" />
-
-                  {player.iconUrl ? (
-                    <image
-                      href={player.iconUrl}
-                      x="-28"
-                      y="-28"
-                      width="56"
-                      height="56"
-                      clipPath={`url(#clip-${player.id})`}
-                    />
-                  ) : (
-                    <text
-                      x="0"
-                      y="0"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fill={ratingColor(player.rating)}
-                      fontSize="14"
-                      fontWeight="bold"
-                      fontFamily="monospace"
-                    >
-                      {player.icon}
-                    </text>
-                  )}
-
-                  {/* Name label */}
-                  <text
-                    x="0"
-                    y="52"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="rgba(255,255,255,0.9)"
-                    fontSize="13"
-                    fontFamily="Inter, sans-serif"
-                  >
-                    {player.name}
-                  </text>
-                </motion.g>
-              </motion.g>
+                player={player}
+                index={i}
+                inView={inView}
+                reducedMotion={!!reducedMotion}
+                svgRef={svgRef}
+                onHover={handleMouseEnter}
+                onLeave={handleMouseLeave}
+                onSelect={handleNodeClick}
+              />
             ))}
 
             {/* Dynamic position labels from formation config */}

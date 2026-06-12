@@ -8,6 +8,9 @@ export const PERSONAL = {
   firstName: 'Aksh',
   lastName: 'Maheshwari',
   github: 'AkshMaheshwari',         // ← update to your exact GitHub username
+  email: 'aksh.maheshwari05@gmail.com',  // ← update to your contact email
+  linkedin: 'aksh-maheshwari-a07609281',      // ← update to your LinkedIn handle (linkedin.com/in/<this>)
+  cvUrl: 'https://drive.google.com/file/d/1_RmJ45Z878KSmNf-Z1Z-VkxzyjFFmDzv/view?usp=sharing',  // ← your CV Drive link
   role: 'Full Stack Developer',
   jerseyNumber: 10,
   club: 'Wiglo.ai',
@@ -158,8 +161,8 @@ export const PROJECTS: Project[] = [
     techStack: ['Next.js', 'React', 'Prisma', 'Supabase', 'Google APIs'],
     stars: 5,
     description:
-      'AI-assisted productivity platform that syncs Gmail emails with Google Calendar workflows. Extracts deadlines from email threads via a queue-based approval system.',
-    highlights: ['Gmail ↔ Calendar Sync', 'Google OAuth', 'Queue Approval System', 'Duplicate Prevention'],
+      'AI-assisted productivity platform that turns Gmail threads into Google Calendar events. Parses emails to extract deadlines, routes them through a queue-based approval flow with duplicate detection, and syncs approved items via Google APIs — secured with OAuth on a type-safe Prisma + Supabase data layer.',
+    highlights: ['Gmail ↔ Calendar Sync', 'AI Deadline Extraction', 'Google OAuth 2.0', 'Queue Approval Flow', 'Duplicate Prevention', 'Prisma + Supabase'],
     liveUrl: 'https://syncifi.tech',
     githubUrl: '#',
     techCount: 5,
@@ -172,8 +175,8 @@ export const PROJECTS: Project[] = [
     techStack: ['Next.js', 'React', 'Firebase', 'Geolocation API'],
     stars: 4,
     description:
-      'Food waste management platform with real-time analytics, NGO coordination, and location-based NGO discovery to efficiently redistribute surplus food.',
-    highlights: ['Real-time Analytics', 'NGO Discovery', 'Voice Feedback', 'Geolocation API'],
+      'Food-waste redistribution platform connecting surplus-food donors with nearby NGOs before food expires. Geolocation-based NGO discovery, real-time donation analytics on Firebase, voice-based feedback, and coordination tools for shelters and donors.',
+    highlights: ['Geolocation NGO Discovery', 'Real-time Analytics', 'Firebase Auth + DB', 'Voice Feedback', 'NGO Coordination', 'Mobile-first UI'],
     liveUrl: 'https://zeroplate.vercel.app',
     githubUrl: '#',
     techCount: 4,
@@ -186,8 +189,8 @@ export const PROJECTS: Project[] = [
     techStack: ['MongoDB', 'Express', 'React', 'Node.js', 'Razorpay'],
     stars: 4,
     description:
-      'Pet adoption platform with role-based dashboards for users and animal shelters. Secure Razorpay donation flow, advanced listing filters, and application tracking.',
-    highlights: ['Razorpay Payments', 'Role-based Dashboards', 'Advanced Filters', 'Application Tracking'],
+      'End-to-end MERN pet adoption platform with separate role-based dashboards for adopters and shelters. Covers the full adoption lifecycle — searchable listings with advanced filters, application submission and status tracking — plus a secure Razorpay donation flow with webhook verification.',
+    highlights: ['Razorpay + Webhooks', 'Role-based Dashboards', 'Adoption Lifecycle', 'Advanced Search Filters', 'Express REST API', 'MERN Architecture'],
     liveUrl: 'https://pawpal-psi.vercel.app',
     githubUrl: '#',
     techCount: 5,
@@ -213,7 +216,7 @@ export const TIMELINE: TransferEntry[] = [
     endYear: 'Present',
     transferType: 'PERMANENT',
     isCurrent: true,
-    skillNote: 'Building: AI-powered product features, full-stack development, working with LLM integrations',
+    skillNote: 'Building: AI product features end-to-end — LLM integrations, prompt pipelines, and full-stack delivery in a fast-moving startup',
   },
   {
     club: 'MyEzz',
@@ -225,7 +228,7 @@ export const TIMELINE: TransferEntry[] = [
     endYear: 'Feb 2026',
     transferType: 'PERMANENT',
     isCurrent: false,
-    skillNote: 'Gained: production food delivery platform, REST API optimization, real-user debugging at scale',
+    skillNote: 'Gained: shipped features on a live food-delivery platform — REST API optimization, debugging issues reported by real users in production',
   },
   {
     club: 'WE DISTRICT',
@@ -238,7 +241,7 @@ export const TIMELINE: TransferEntry[] = [
     endYear: 'Jan 2026',
     transferType: 'LOAN',
     isCurrent: false,
-    skillNote: 'Built & deployed NGO website with Supabase; slashed latency by 40% through perf optimization',
+    skillNote: 'Built & deployed the NGO\'s website end-to-end on Supabase; cut page latency 40% through query and asset optimization',
   },
   {
     club: 'Credence HR Services',
@@ -251,7 +254,7 @@ export const TIMELINE: TransferEntry[] = [
     endYear: 'Jul 2025',
     transferType: 'LOAN',
     isCurrent: false,
-    skillNote: 'Built: InductX onboarding workflows, PlayFab gamification, HR-aligned journey research',
+    skillNote: 'Built: InductX employee-onboarding workflows with PlayFab gamification; researched & mapped HR-aligned user journeys',
   },
   {
     club: 'K.J. Somaiya College of Engineering',
@@ -263,6 +266,6 @@ export const TIMELINE: TransferEntry[] = [
     endYear: 'May 2027',
     transferType: 'PERMANENT',
     isCurrent: false,
-    skillNote: 'Foundation: DSA, OOP, algorithms, OS — ICPC AIR 251 Asia West, CodeChef 3★ (1605)',
+    skillNote: 'Foundation: DSA, OOP, OS, algorithms — CGPA 9.5, ICPC Asia West AIR 251, CodeChef 3★ (1605)',
   },
 ];

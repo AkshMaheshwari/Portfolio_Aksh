@@ -150,10 +150,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function Roster() {
   return (
-    <section id="roster" className="py-16 bg-[#080f0a]">
+    <section id="roster" className="py-16 section-glow">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">SQUAD ROSTER</h2>
+          <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">SQUAD ROSTER</h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
             PROJECT TRANSFER CARDS — HOVER TO FLIP
           </p>

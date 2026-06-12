@@ -21,10 +21,10 @@ export default async function SeasonStats() {
     stats = await fetchGitHubStats(PERSONAL.github);
   } catch {
     return (
-      <section id="stats" className="py-20 bg-[#080f0a]">
+      <section id="stats" className="py-20 section-glow">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">SEASON STATS</h2>
+            <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">SEASON STATS</h2>
             <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
               LIVE GITHUB PERFORMANCE DATA
             </p>
@@ -36,11 +36,11 @@ export default async function SeasonStats() {
   }
 
   return (
-    <section id="stats" className="py-20 bg-[#080f0a]">
+    <section id="stats" className="py-20 section-glow">
       <div className="max-w-6xl mx-auto px-4">
         {/* Scoreboard header */}
         <div className="text-center mb-12">
-          <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-wide">SEASON STATS</h2>
+          <h2 className="font-bebas text-6xl md:text-8xl heading-gradient tracking-wide">SEASON STATS</h2>
           <p className="font-inter text-[#f5c518] tracking-[0.3em] text-sm mt-1">
             LIVE GITHUB PERFORMANCE DATA
           </p>
