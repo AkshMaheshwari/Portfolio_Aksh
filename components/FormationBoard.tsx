@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { FORMATIONS, BENCH_PLAYERS } from '@/lib/data';
 import type { Player } from '@/types';
 
 const PITCH_W = 600;
 const PITCH_H = 960;
+
+// Players pop in after the pitch markings finish drawing
+const PLAYER_DELAY = 1.05;
 
 interface TooltipState {
   player: Player;
@@ -22,21 +25,13 @@ const positionLabel: Record<Player['position'], string> = {
   BENCH: 'Bench',
 };
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
-};
-
-const playerVariants = {
-  hidden: { opacity: 0, scale: 0 },
-  visible: { opacity: 1, scale: 1, transition: { type: 'spring' as const, stiffness: 180, damping: 14 } },
-};
-
 export default function FormationBoard() {
   const [activeFormation, setActiveFormation] = useState(0);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const inView = useInView(svgRef, { once: true, amount: 0.15 });
+  const reducedMotion = useReducedMotion();
 
   const currentFormation = FORMATIONS[activeFormation];
 
@@ -68,6 +63,29 @@ export default function FormationBoard() {
   };
 
   const ratingColor = (r: number) => (r >= 90 ? '#f5c518' : r >= 85 ? '#4ade80' : '#60a5fa');
+
+  // Stroke markings "paint on" via pathLength; opacity snaps in at each delay
+  const draw = (delay: number) =>
+    reducedMotion
+      ? {}
+      : {
+          initial: { pathLength: 0, opacity: 0 },
+          animate: inView ? { pathLength: 1, opacity: 1 } : undefined,
+          transition: {
+            pathLength: { duration: 0.8, delay, ease: 'easeInOut' as const },
+            opacity: { duration: 0.01, delay },
+          },
+        };
+
+  // Filled elements (spots, goals, background) just fade in
+  const fadeIn = (delay: number) =>
+    reducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0 },
+          animate: inView ? { opacity: 1 } : undefined,
+          transition: { duration: 0.5, delay },
+        };
 
   return (
     <section id="formation" className="py-16 bg-[#080f0a]">
@@ -118,79 +136,95 @@ export default function FormationBoard() {
               <pattern id="pitchStripe" x="0" y="0" width={PITCH_W} height="96" patternUnits="userSpaceOnUse">
                 <rect x="0" y="0" width={PITCH_W} height="48" fill="rgba(0,0,0,0.07)" />
               </pattern>
-              {/* Per-player clip paths — keyed to activeFormation so they move with formation changes */}
+              {/*
+                Per-player clip paths at local (0,0) — each node is drawn inside a
+                translated <g>, so the clip travels with the player automatically.
+              */}
               {currentFormation.players.map((player) =>
                 player.iconUrl ? (
-                  <clipPath key={`clip-${player.id}-${activeFormation}`} id={`clip-${player.id}`}>
-                    <circle cx={player.x} cy={player.y} r="28" />
+                  <clipPath key={`clip-${player.id}`} id={`clip-${player.id}`}>
+                    <circle cx="0" cy="0" r="28" />
                   </clipPath>
                 ) : null
               )}
             </defs>
 
             {/* Pitch background */}
-            <rect x="0" y="0" width={PITCH_W} height={PITCH_H} fill="url(#pitchGrad)" rx="12" />
-            <rect x="0" y="0" width={PITCH_W} height={PITCH_H} fill="url(#pitchStripe)" rx="12" />
+            <motion.rect {...fadeIn(0)} x="0" y="0" width={PITCH_W} height={PITCH_H} fill="url(#pitchGrad)" rx="12" />
+            <motion.rect {...fadeIn(0.1)} x="0" y="0" width={PITCH_W} height={PITCH_H} fill="url(#pitchStripe)" rx="12" />
 
             {/* Outer border */}
-            <rect x="18" y="18" width={PITCH_W - 36} height={PITCH_H - 36} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" rx="4" />
+            <motion.rect {...draw(0.15)} x="18" y="18" width={PITCH_W - 36} height={PITCH_H - 36} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" rx="4" />
 
             {/* Center line */}
-            <line x1="18" y1={PITCH_H / 2} x2={PITCH_W - 18} y2={PITCH_H / 2} stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.line {...draw(0.35)} x1="18" y1={PITCH_H / 2} x2={PITCH_W - 18} y2={PITCH_H / 2} stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
             {/* Center circle */}
-            <circle cx={PITCH_W / 2} cy={PITCH_H / 2} r="82" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-            <circle cx={PITCH_W / 2} cy={PITCH_H / 2} r="5" fill="rgba(255,255,255,0.7)" />
+            <motion.circle {...draw(0.45)} cx={PITCH_W / 2} cy={PITCH_H / 2} r="82" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.circle {...fadeIn(0.9)} cx={PITCH_W / 2} cy={PITCH_H / 2} r="5" fill="rgba(255,255,255,0.7)" />
 
             {/* Top penalty area */}
-            <rect x="162" y="18" width="276" height="132" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.rect {...draw(0.55)} x="162" y="18" width="276" height="132" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
             {/* Top goal area */}
-            <rect x="228" y="18" width="144" height="50" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.rect {...draw(0.7)} x="228" y="18" width="144" height="50" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
             {/* Top goal */}
-            <rect x="262" y="4" width="76" height="16" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+            <motion.rect {...fadeIn(0.9)} x="262" y="4" width="76" height="16" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
             {/* Top penalty spot */}
-            <circle cx="300" cy="143" r="4" fill="rgba(255,255,255,0.7)" />
+            <motion.circle {...fadeIn(0.9)} cx="300" cy="143" r="4" fill="rgba(255,255,255,0.7)" />
             {/* Top penalty arc */}
-            <path d="M 210 150 A 82 82 0 0 1 390 150" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.8)} d="M 210 150 A 82 82 0 0 1 390 150" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
             {/* Bottom penalty area */}
-            <rect x="162" y={PITCH_H - 150} width="276" height="132" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.rect {...draw(0.55)} x="162" y={PITCH_H - 150} width="276" height="132" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
             {/* Bottom goal area */}
-            <rect x="228" y={PITCH_H - 68} width="144" height="50" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.rect {...draw(0.7)} x="228" y={PITCH_H - 68} width="144" height="50" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
             {/* Bottom goal */}
-            <rect x="262" y={PITCH_H - 20} width="76" height="16" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+            <motion.rect {...fadeIn(0.9)} x="262" y={PITCH_H - 20} width="76" height="16" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
             {/* Bottom penalty spot */}
-            <circle cx="300" cy={PITCH_H - 143} r="4" fill="rgba(255,255,255,0.7)" />
+            <motion.circle {...fadeIn(0.9)} cx="300" cy={PITCH_H - 143} r="4" fill="rgba(255,255,255,0.7)" />
             {/* Bottom penalty arc */}
-            <path d={`M 210 ${PITCH_H - 150} A 82 82 0 0 0 390 ${PITCH_H - 150}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.8)} d={`M 210 ${PITCH_H - 150} A 82 82 0 0 0 390 ${PITCH_H - 150}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
             {/* Corner arcs */}
-            <path d="M 18 38 A 18 18 0 0 1 36 18" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-            <path d={`M ${PITCH_W - 36} 18 A 18 18 0 0 1 ${PITCH_W - 18} 38`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-            <path d={`M 18 ${PITCH_H - 38} A 18 18 0 0 0 36 ${PITCH_H - 18}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-            <path d={`M ${PITCH_W - 36} ${PITCH_H - 18} A 18 18 0 0 0 ${PITCH_W - 18} ${PITCH_H - 38}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.9)} d="M 18 38 A 18 18 0 0 1 36 18" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.9)} d={`M ${PITCH_W - 36} 18 A 18 18 0 0 1 ${PITCH_W - 18} 38`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.9)} d={`M 18 ${PITCH_H - 38} A 18 18 0 0 0 36 ${PITCH_H - 18}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+            <motion.path {...draw(0.9)} d={`M ${PITCH_W - 36} ${PITCH_H - 18} A 18 18 0 0 0 ${PITCH_W - 18} ${PITCH_H - 38}`} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
-            {/* Player nodes — re-keyed on formation change to replay stagger animation */}
-            <motion.g
-              key={activeFormation}
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-            >
-              {currentFormation.players.map((player) => (
+            {/*
+              Player nodes — keyed by stable player.id so formation changes spring
+              each node from its old x/y to the new one (players "run" into place).
+              The outer <g> owns position, the inner <g> owns the entrance pop.
+            */}
+            {currentFormation.players.map((player, i) => (
+              <motion.g
+                key={player.id}
+                initial={false}
+                animate={{ x: player.x, y: player.y }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : { type: 'spring', stiffness: 60, damping: 13, mass: 0.9 }
+                }
+                onMouseEnter={() => handleMouseEnter(player)}
+                onMouseLeave={handleMouseLeave}
+                onClick={(e) => handleNodeClick(e, player)}
+                style={{ cursor: 'pointer' }}
+              >
                 <motion.g
-                  key={player.id}
-                  variants={playerVariants}
-                  onMouseEnter={() => handleMouseEnter(player)}
-                  onMouseLeave={handleMouseLeave}
-                  onClick={(e) => handleNodeClick(e, player)}
-                  style={{ cursor: 'pointer' }}
+                  initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : undefined}
+                  transition={{
+                    delay: PLAYER_DELAY + i * 0.07,
+                    type: 'spring',
+                    stiffness: 180,
+                    damping: 14,
+                  }}
                 >
                   {/* Glow ring */}
                   <circle
-                    cx={player.x}
-                    cy={player.y}
+                    cx="0"
+                    cy="0"
                     r="40"
                     fill="none"
                     stroke={ratingColor(player.rating)}
@@ -198,22 +232,22 @@ export default function FormationBoard() {
                     opacity="0.4"
                   />
                   {/* Main circle */}
-                  <circle cx={player.x} cy={player.y} r="33" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2.5" />
-                  <circle cx={player.x} cy={player.y} r="28" fill="#1a3a24" />
+                  <circle cx="0" cy="0" r="33" fill="#0a1a10" stroke={ratingColor(player.rating)} strokeWidth="2.5" />
+                  <circle cx="0" cy="0" r="28" fill="#1a3a24" />
 
                   {player.iconUrl ? (
                     <image
                       href={player.iconUrl}
-                      x={player.x - 28}
-                      y={player.y - 28}
+                      x="-28"
+                      y="-28"
                       width="56"
                       height="56"
                       clipPath={`url(#clip-${player.id})`}
                     />
                   ) : (
                     <text
-                      x={player.x}
-                      y={player.y}
+                      x="0"
+                      y="0"
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill={ratingColor(player.rating)}
@@ -227,8 +261,8 @@ export default function FormationBoard() {
 
                   {/* Name label */}
                   <text
-                    x={player.x}
-                    y={player.y + 52}
+                    x="0"
+                    y="52"
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="rgba(255,255,255,0.9)"
@@ -238,14 +272,14 @@ export default function FormationBoard() {
                     {player.name}
                   </text>
                 </motion.g>
-              ))}
-            </motion.g>
+              </motion.g>
+            ))}
 
             {/* Dynamic position labels from formation config */}
             {currentFormation.posLabels.map(({ text, y }) => (
-              <text key={`${text}-${y}`} x="26" y={y} fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">
+              <motion.text {...fadeIn(1.0)} key={`${text}-${y}`} x="26" y={y} fill="rgba(255,255,255,0.3)" fontSize="10" fontFamily="monospace">
                 {text}
-              </text>
+              </motion.text>
             ))}
           </svg>
 

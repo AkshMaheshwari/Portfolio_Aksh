@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { PERSONAL } from '@/lib/data';
 
 const NAV_LINKS = [
@@ -17,6 +17,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [clock, setClock] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     const tick = () =>
@@ -49,6 +50,11 @@ export default function Navbar() {
             : 'bg-transparent'
         }`}
       >
+        {/* Match-clock scroll progress — fills as the user moves through the page */}
+        <motion.div
+          className="absolute top-0 left-0 right-0 h-[2px] origin-left bg-gradient-to-r from-[#f5c518] via-[#f5c518] to-[#4ade80] shadow-[0_0_8px_rgba(245,197,24,0.5)]"
+          style={{ scaleX: scrollYProgress }}
+        />
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           {/* Crest */}
           <a href="#hero" className="flex items-center gap-2 group">

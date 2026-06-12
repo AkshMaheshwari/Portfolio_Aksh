@@ -33,11 +33,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.88, y: 24 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ delay: index * 0.1, type: 'spring', stiffness: 80 }}
-      className="card-3d-wrapper"
+      transition={{ delay: index * 0.08, type: 'spring', stiffness: 90, damping: 14 }}
+      className="card-3d-wrapper group"
       onMouseEnter={() => { if (isHoverDevice()) setFlipped(true); }}
       onMouseLeave={() => { if (isHoverDevice()) setFlipped(false); }}
       onClick={() => { if (!isHoverDevice()) setFlipped(v => !v); }}
@@ -48,7 +48,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
       >
         {/* Front */}
-        <div className="card-face w-full h-full bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-6 flex flex-col hover:border-[#f5c518]/40 transition-colors cursor-pointer">
+        <div className="card-face card-shimmer w-full h-full bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-6 flex flex-col group-hover:border-[#f5c518]/40 group-hover:shadow-[0_0_28px_rgba(245,197,24,0.12)] transition-all cursor-pointer">
           {/* Header */}
           <div className="mb-4">
             <div className="font-bebas text-2xl text-white tracking-wide leading-none mb-1">
@@ -83,7 +83,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Back */}
-        <div className="card-face card-back w-full h-full bg-[#111d14] border border-[#f5c518]/40 rounded-xl p-6 flex flex-col">
+        <div className="card-face card-back card-shimmer w-full h-full bg-[#111d14] border border-[#f5c518]/40 rounded-xl p-6 flex flex-col group-hover:shadow-[0_0_28px_rgba(245,197,24,0.12)] transition-shadow">
           <div className="font-bebas text-xl text-[#f5c518] tracking-wide mb-3">
             {project.name.toUpperCase()} — SCOUT REPORT
           </div>
@@ -117,26 +117,30 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
           </div>
 
-          {/* CTAs */}
+          {/* CTAs — boot-stud press on tap */}
           <div className="flex gap-2">
-            <a
+            <motion.a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
+              whileTap={{ scale: 0.93, y: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 22 }}
               className="flex-1 py-2 bg-[#f5c518] text-[#080f0a] font-bebas tracking-widest text-sm rounded text-center hover:bg-white transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               HIGHLIGHTS
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              whileTap={{ scale: 0.93, y: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 22 }}
               className="flex-1 py-2 border border-[#f5c518]/50 text-[#f5c518] font-bebas tracking-widest text-sm rounded text-center hover:bg-[#f5c518]/10 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               GITHUB
-            </a>
+            </motion.a>
           </div>
         </div>
       </motion.div>

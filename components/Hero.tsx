@@ -1,28 +1,39 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { PERSONAL } from '@/lib/data';
+
+// Quick scale-down + shadow compression, like pressing boot studs into turf
+const studPress = {
+  whileTap: { scale: 0.93, y: 1 },
+  transition: { type: 'spring' as const, stiffness: 500, damping: 22 },
+};
 
 export default function Hero() {
   const nameLetters = PERSONAL.name.toUpperCase().split('');
+  const reducedMotion = useReducedMotion();
+
+  const { scrollY } = useScroll();
+  const parallaxY = useTransform(scrollY, [0, 800], [0, 160]);
 
   return (
     <section
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden hero-bg pitch-stripes"
     >
-      {/* Pitch center-circle SVG overlay */}
-      <svg
+      {/* Pitch center-circle SVG overlay — drifts down slower than the scroll */}
+      <motion.svg
         className="absolute inset-0 w-full h-full pointer-events-none opacity-5"
         viewBox="0 0 800 600"
         preserveAspectRatio="xMidYMid slice"
+        style={{ y: reducedMotion ? 0 : parallaxY }}
       >
         <circle cx="400" cy="300" r="200" fill="none" stroke="white" strokeWidth="2" />
         <line x1="0" y1="300" x2="800" y2="300" stroke="white" strokeWidth="1.5" />
         <circle cx="400" cy="300" r="6" fill="white" />
         <rect x="0" y="150" width="110" height="300" fill="none" stroke="white" strokeWidth="1.5" />
         <rect x="690" y="150" width="110" height="300" fill="none" stroke="white" strokeWidth="1.5" />
-      </svg>
+      </motion.svg>
 
 
       {/* Main name */}
@@ -35,7 +46,7 @@ export default function Hero() {
             transition={{ delay: 0.4 + i * 0.04, type: 'spring', stiffness: 120, damping: 14 }}
             className={letter === ' ' ? 'w-6 inline-block' : 'inline-block'}
           >
-            {letter === ' ' ? ' ' : letter}
+            {letter === ' ' ? ' ' : letter}
           </motion.span>
         ))}
       </h1>
@@ -79,26 +90,51 @@ export default function Hero() {
         transition={{ delay: 1.4 }}
         className="z-10 mt-10 flex flex-wrap items-center justify-center gap-4"
       >
-        <a
+        <motion.a
           href="#roster"
+          {...studPress}
+          whileTap={{ ...studPress.whileTap, boxShadow: '0 1px 4px rgba(245,197,24,0.15)' }}
+          style={{ boxShadow: '0 6px 18px rgba(245,197,24,0.25)' }}
           className="px-8 py-3 bg-[#f5c518] text-[#080f0a] font-bebas tracking-widest text-lg rounded hover:bg-white transition-colors"
         >
           VIEW ROSTER
-        </a>
-        <a
+        </motion.a>
+        <motion.a
           href={`https://github.com/${PERSONAL.github}`}
           target="_blank"
           rel="noopener noreferrer"
+          {...studPress}
+          whileTap={{ ...studPress.whileTap, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}
+          style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }}
           className="px-8 py-3 border border-[#f5c518]/50 text-[#f5c518] font-bebas tracking-widest text-lg rounded hover:bg-[#f5c518]/10 transition-colors"
         >
           GITHUB PROFILE
-        </a>
+        </motion.a>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — a small ball bouncing on the touchline */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
         <span className="font-inter text-xs text-white/30 tracking-widest uppercase">Scroll</span>
-        <div className="heartbeat text-[#f5c518] text-2xl">↓</div>
+        <div className="flex flex-col items-center">
+          <motion.svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            animate={reducedMotion ? undefined : { y: [0, 12, 0], rotate: [0, 360] }}
+            transition={{
+              y: { duration: 1.3, repeat: Infinity, times: [0, 0.5, 1], ease: ['easeIn', 'easeOut'] },
+              rotate: { duration: 2.6, repeat: Infinity, ease: 'linear' },
+            }}
+          >
+            <circle cx="12" cy="12" r="10" fill="none" stroke="#f5c518" strokeWidth="1.6" />
+            <path d="M12 7.5 L16.3 10.6 L14.6 15.6 L9.4 15.6 L7.7 10.6 Z" fill="#f5c518" />
+          </motion.svg>
+          <motion.div
+            className="mt-1.5 h-1 w-4 rounded-full bg-[#f5c518]/40 blur-[2px]"
+            animate={reducedMotion ? undefined : { scaleX: [0.55, 1.15, 0.55], opacity: [0.25, 0.55, 0.25] }}
+            transition={{ duration: 1.3, repeat: Infinity, times: [0, 0.5, 1], ease: ['easeIn', 'easeOut'] }}
+          />
+        </div>
       </div>
 
       {/* Bottom gradient fade */}

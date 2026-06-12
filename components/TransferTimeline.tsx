@@ -46,53 +46,102 @@ interface TimelineEntryProps {
   index: number;
 }
 
+// Entry slides in from the left, then the badge pops and the content
+// follows with a short stagger — like a transfer announcement reveal.
+const entryVariants = {
+  hidden: { opacity: 0, x: -64 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.12,
+      type: 'spring' as const,
+      stiffness: 70,
+      damping: 16,
+      delayChildren: i * 0.12 + 0.15,
+      staggerChildren: 0.12,
+    },
+  }),
+};
+
+const badgeVariants = {
+  hidden: { opacity: 0, scale: 0.4, rotate: -25 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    transition: { type: 'spring' as const, stiffness: 260, damping: 15 },
+  },
+};
+
+const contentVariants = {
+  hidden: { opacity: 0, x: -16 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: 'spring' as const, stiffness: 120, damping: 16 },
+  },
+};
+
+const noteVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring' as const, stiffness: 120, damping: 16 },
+  },
+};
+
 function TimelineEntry({ entry, index }: TimelineEntryProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      variants={entryVariants}
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: index * 0.15, type: 'spring', stiffness: 80 }}
       className="relative flex gap-6 pb-10"
     >
       {/* Club badge — z-10 keeps it in front of the timeline line */}
-      <div className="relative z-10 flex-shrink-0">
+      <motion.div variants={badgeVariants} className="relative z-10 flex-shrink-0">
         <ClubBadge entry={entry} />
         {entry.isCurrent && (
           <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#f5c518] flex items-center justify-center">
             <div className="w-2 h-2 rounded-full bg-[#080f0a]" />
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        {/* Club name */}
-        <div
-          className="font-bebas text-xl sm:text-2xl tracking-wide leading-none mb-0.5"
-          style={{ color: entry.isCurrent ? '#f5c518' : 'white' }}
-        >
-          {entry.club}
-          {entry.isCurrent && (
-            <span className="ml-2 text-xs sm:text-sm text-[#f5c518]/60 font-inter normal-case">
-              ← Current
-            </span>
-          )}
-        </div>
+        <motion.div variants={contentVariants}>
+          {/* Club name */}
+          <div
+            className="font-bebas text-xl sm:text-2xl tracking-wide leading-none mb-0.5"
+            style={{ color: entry.isCurrent ? '#f5c518' : 'white' }}
+          >
+            {entry.club}
+            {entry.isCurrent && (
+              <span className="ml-2 text-xs sm:text-sm text-[#f5c518]/60 font-inter normal-case">
+                ← Current
+              </span>
+            )}
+          </div>
 
-        {/* Role + date + badge all inline */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
-          <span className="font-inter text-white/60 text-sm">{entry.role}</span>
-          <span className="font-mono text-white/40 text-xs">{entry.startYear} — {entry.endYear}</span>
-        </div>
+          {/* Role + date + badge all inline */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
+            <span className="font-inter text-white/60 text-sm">{entry.role}</span>
+            <span className="font-mono text-white/40 text-xs">{entry.startYear} — {entry.endYear}</span>
+          </div>
+        </motion.div>
 
         {/* Skill note */}
-        <div className="mt-3 px-4 py-2.5 bg-[#0d1f14] border border-[#ffffff10] rounded-lg">
+        <motion.div variants={noteVariants} className="mt-3 px-4 py-2.5 bg-[#0d1f14] border border-[#ffffff10] rounded-lg">
           <span className="text-[#f5c518]/60 text-xs font-mono uppercase tracking-widest mr-2">
             Transfer Fee →
           </span>
           <span className="text-white/65 text-sm font-inter">{entry.skillNote}</span>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
