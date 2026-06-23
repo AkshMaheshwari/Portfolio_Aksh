@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 
 const bebasNeue = Bebas_Neue({
@@ -63,18 +62,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bebasNeue.variable} ${inter.variable}`}>
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
+          }}
+        />
+        <script async src="https://plausible.io/js/pa-POpiaB09tVLZr_rAPyy2n.js" />
+      </head>
       <body className="font-inter bg-pitch text-white antialiased">{children}</body>
-      <Script
-        id="plausible-init"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
-        }}
-      />
-      <Script
-        src="https://plausible.io/js/pa-POpiaB09tVLZr_rAPyy2n.js"
-        strategy="afterInteractive"
-      />
     </html>
   );
 }
