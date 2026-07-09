@@ -67,7 +67,7 @@ export default function Contact() {
               </div>
               <div className="font-bebas text-[#f5c518] tracking-widest text-lg">{c.label}</div>
               <div className="font-inter text-white/70 text-sm break-all">{c.value}</div>
-              <div className="font-inter text-white/30 text-xs mt-2">{c.note}</div>
+              <div className="font-inter text-white/60 text-xs mt-2">{c.note}</div>
             </motion.a>
           ))}
         </div>

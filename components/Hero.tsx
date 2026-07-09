@@ -27,6 +27,7 @@ export default function Hero() {
         viewBox="0 0 800 600"
         preserveAspectRatio="xMidYMid slice"
         style={{ y: reducedMotion ? 0 : parallaxY }}
+        aria-hidden="true"
       >
         <circle cx="400" cy="300" r="200" fill="none" stroke="white" strokeWidth="2" />
         <line x1="0" y1="300" x2="800" y2="300" stroke="white" strokeWidth="1.5" />
@@ -114,12 +115,13 @@ export default function Hero() {
 
       {/* Scroll indicator — a small ball bouncing on the touchline */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <span className="font-inter text-xs text-white/30 tracking-widest uppercase">Scroll</span>
+        <span className="font-inter text-xs text-white/60 tracking-widest uppercase">Scroll</span>
         <div className="flex flex-col items-center">
           <motion.svg
             width="18"
             height="18"
             viewBox="0 0 24 24"
+            aria-hidden="true"
             animate={reducedMotion ? undefined : { y: [0, 12, 0], rotate: [0, 360] }}
             transition={{
               y: { duration: 1.3, repeat: Infinity, times: [0, 0.5, 1], ease: ['easeIn', 'easeOut'] },

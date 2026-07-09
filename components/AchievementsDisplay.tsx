@@ -52,7 +52,7 @@ function PlatformUnavailable({ name }: { name: string }) {
     <div className="flex flex-col items-center justify-center h-full min-h-[200px] gap-2">
       <div className="text-3xl">⏸</div>
       <div className="font-bebas text-[#f5c518] tracking-widest text-lg">MATCH POSTPONED</div>
-      <div className="text-white/40 text-xs font-inter">{name} data unavailable</div>
+      <div className="text-white/60 text-xs font-inter">{name} data unavailable</div>
     </div>
   );
 }
@@ -146,9 +146,9 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
             <div className="flex flex-wrap items-center gap-2 mb-1">
               
             </div>
-            <div className="font-bebas text-3xl md:text-4xl text-white tracking-wide leading-none mb-1">
+            <h3 className="font-bebas text-3xl md:text-4xl text-white tracking-wide leading-none mb-1">
               ICPC ASIA WEST REGIONALS
-            </div>
+            </h3>
             <div className="font-inter text-white/50 text-sm mb-4">
               International Collegiate Programming Contest
             </div>
@@ -156,7 +156,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
             <div className="flex flex-wrap gap-6">
               <div>
                 <div className="font-bebas text-5xl text-[#f5c518] leading-none">#251</div>
-                <div className="text-white/40 text-xs font-mono mt-0.5">ALL INDIA RANK</div>
+                <div className="text-white/60 text-xs font-mono mt-0.5">ALL INDIA RANK</div>
               </div>
               <div className="self-end pb-1">
                 <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
           {cf ? (
             <>
               <div className="flex items-center justify-between mb-4">
-                <div className="font-mono text-[10px] text-white/40 tracking-widest">CODEFORCES</div>
+                <div className="font-mono text-[10px] text-white/60 tracking-widest">CODEFORCES</div>
                 <span
                   className="px-2 py-0.5 rounded text-xs font-mono font-semibold"
                   style={{
@@ -201,11 +201,11 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
                   {cf.rating}
                 </span>
               </div>
-              <div className="text-white/40 text-xs font-mono mb-4">CURRENT RATING</div>
+              <div className="text-white/60 text-xs font-mono mb-4">CURRENT RATING</div>
 
               {/* Rating progress bar */}
               <div className="mb-3">
-                <div className="flex justify-between text-[10px] font-mono text-white/30 mb-1">
+                <div className="flex justify-between text-[10px] font-mono text-white/60 mb-1">
                   <span>0</span>
                   <span>1200</span>
                   <span>1600</span>
@@ -234,10 +234,10 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
               </div>
 
               <div className="mt-auto pt-3 border-t border-[#ffffff10] flex items-center justify-between">
-                <div className="text-white/40 text-xs font-inter">
+                <div className="text-white/60 text-xs font-inter">
                   Peak <span className="font-mono" style={{ color: cfCol }}>{cf.maxRating}</span>
                 </div>
-                <div className="text-white/30 text-xs font-mono">@{cf.handle}</div>
+                <div className="text-white/60 text-xs font-mono">@{cf.handle}</div>
               </div>
             </>
           ) : (
@@ -251,7 +251,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
           className="bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-6 flex flex-col hover:border-[#ffffff30] transition-colors"
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="font-mono text-[10px] text-white/40 tracking-widest">CODECHEF</div>
+            <div className="font-mono text-[10px] text-white/60 tracking-widest">CODECHEF</div>
             <span
               className="px-2 py-0.5 rounded text-xs font-mono font-semibold"
               style={{
@@ -270,7 +270,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
               {CC_RATING}
             </span>
           </div>
-          <div className="text-white/40 text-xs font-mono mb-4">CURRENT RATING</div>
+          <div className="text-white/60 text-xs font-mono mb-4">CURRENT RATING</div>
 
           {/* Stars */}
           <div className="flex gap-1.5 mb-1">
@@ -284,11 +284,11 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
               </span>
             ))}
           </div>
-          <div className="text-white/40 text-xs font-mono mb-4">{CC_STARS} STAR RATED</div>
+          <div className="text-white/60 text-xs font-mono mb-4">{CC_STARS} STAR RATED</div>
 
           {/* Rating bar */}
           <div className="mb-3">
-            <div className="flex justify-between text-[10px] font-mono text-white/30 mb-1">
+            <div className="flex justify-between text-[10px] font-mono text-white/60 mb-1">
               <span>0</span>
               <span>1600</span>
               <span>2000</span>
@@ -307,7 +307,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
           </div>
 
           <div className="mt-auto pt-3 border-t border-[#ffffff10]">
-            <div className="text-white/40 text-xs font-inter">Competitive Programming · India</div>
+            <div className="text-white/60 text-xs font-inter">Competitive Programming · India</div>
           </div>
         </motion.div>
 
@@ -319,7 +319,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
           {lc ? (
             <>
               <div className="flex items-center justify-between mb-4">
-                <div className="font-mono text-[10px] text-white/40 tracking-widest">LEETCODE</div>
+                <div className="font-mono text-[10px] text-white/60 tracking-widest">LEETCODE</div>
                 <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-[#ffa116]/20 text-[#ffa116] border border-[#ffa116]/40">
                   #{lc.globalRanking.toLocaleString('en-US')}
                 </span>
@@ -331,7 +331,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
                   {lc.totalSolved}
                 </span>
               </div>
-              <div className="text-white/40 text-xs font-mono mb-5">PROBLEMS SOLVED</div>
+              <div className="text-white/60 text-xs font-mono mb-5">PROBLEMS SOLVED</div>
 
               {/* Difficulty breakdown */}
               <div className="space-y-2.5 mb-3">
@@ -360,7 +360,7 @@ export default function AchievementsDisplay({ cf, lc }: Props) {
               </div>
 
               <div className="mt-auto pt-3 border-t border-[#ffffff10]">
-                <div className="text-white/30 text-xs font-mono">@aksh_m</div>
+                <div className="text-white/60 text-xs font-mono">@aksh_m</div>
               </div>
             </>
           ) : (

@@ -46,7 +46,7 @@ function StatCard({ label, value, sublabel, index, isText }: StatCardProps) {
           <AnimatedNumber target={value as number} />
         )}
       </div>
-      <div className="font-inter text-xs text-white/40 tracking-wide">{sublabel}</div>
+      <div className="font-inter text-xs text-white/60 tracking-wide">{sublabel}</div>
     </motion.div>
   );
 }

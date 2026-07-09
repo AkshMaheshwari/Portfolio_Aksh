@@ -92,7 +92,7 @@ export default function Navbar() {
             >
               📋 TEAM SHEET
             </motion.a>
-            <span className="font-mono text-xs text-white/40 tabular-nums">{clock}</span>
+            <span className="font-mono text-xs text-white/60 tabular-nums">{clock}</span>
             {PERSONAL.openToWork ? (
               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-xs font-semibold animate-pulse_green">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
@@ -111,6 +111,8 @@ export default function Navbar() {
             className="md:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-menu"
           >
             <span
               className={`block w-6 h-0.5 bg-white transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}
@@ -129,6 +131,7 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-nav-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -157,7 +160,7 @@ export default function Navbar() {
               >
                 📋 TEAM SHEET
               </a>
-              <span className="font-mono text-white/40 text-sm tabular-nums">{clock}</span>
+              <span className="font-mono text-white/60 text-sm tabular-nums">{clock}</span>
               {PERSONAL.openToWork ? (
                 <span className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-sm font-semibold">
                   <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />

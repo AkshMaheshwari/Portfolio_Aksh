@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="bg-[#0d1f14] border-t border-[#ffffff10] py-16">
       {/* Center circle SVG */}
       <div className="flex justify-center mb-8">
-        <svg viewBox="0 0 120 120" width="80" height="80" className="opacity-20">
+        <svg viewBox="0 0 120 120" width="80" height="80" className="opacity-20" aria-hidden="true">
           <circle cx="60" cy="60" r="55" fill="none" stroke="white" strokeWidth="2" />
           <circle cx="60" cy="60" r="30" fill="none" stroke="white" strokeWidth="1.5" />
           <circle cx="60" cy="60" r="5" fill="white" />
@@ -39,7 +39,7 @@ export default function Footer() {
           {PERSONAL.name.toUpperCase()}
         </motion.h3>
 
-        <p className="font-inter text-white/40 text-sm mb-8">
+        <p className="font-inter text-white/60 text-sm mb-8">
           #{PERSONAL.jerseyNumber} · {PERSONAL.role} · {PERSONAL.nationality}
         </p>
 
@@ -53,7 +53,7 @@ export default function Footer() {
           >
             <span>⌨</span> GitHub
           </a>
-          <span className="text-white/20">·</span>
+          <span className="text-white/40" aria-hidden="true">·</span>
           {PERSONAL.openToWork ? (
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-xs font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
@@ -70,7 +70,7 @@ export default function Footer() {
         <div className="h-px bg-[#ffffff10] mb-8 max-w-sm mx-auto" />
 
         {/* Bottom row */}
-        <div className="text-white/30 text-xs font-inter">
+        <div className="text-white/60 text-xs font-inter">
           © {year} {PERSONAL.name}
         </div>
       </div>

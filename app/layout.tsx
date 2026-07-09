@@ -1,6 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
+import { SITE_URL, buildJsonLd } from '@/lib/seo';
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -36,10 +38,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Aksh Maheshwari', url: 'https://github.com/AkshMaheshwari' }],
   creator: 'Aksh Maheshwari',
-  metadataBase: new URL('https://akshmaheshwari.com'),
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
+    url: SITE_URL,
     title: 'Aksh Maheshwari — Full Stack Developer',
     description:
       'Full Stack Developer building with Next.js, React, Supabase & Node.js. ICPC Asia West AIR 251. Check out my projects and career journey.',
@@ -59,7 +65,16 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#080f0a',
+  colorScheme: 'dark',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = buildJsonLd();
+
   return (
     <html lang="en" className={`${bebasNeue.variable} ${inter.variable}`}>
       <head>
@@ -69,9 +84,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
           }}
         />
-        <script async src="https://plausible.io/js/pa-POpiaB09tVLZr_rAPyy2n.js" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
-      <body className="font-inter bg-pitch text-white antialiased">{children}</body>
+      <body className="font-inter bg-pitch text-white antialiased">
+        {children}
+        <Script
+          strategy="afterInteractive"
+          src="https://plausible.io/js/pa-POpiaB09tVLZr_rAPyy2n.js"
+        />
+      </body>
     </html>
   );
 }

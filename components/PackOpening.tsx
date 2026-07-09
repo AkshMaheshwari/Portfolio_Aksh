@@ -43,7 +43,7 @@ export default function PackOpening() {
                   {PERSONAL.firstName[0]}{PERSONAL.lastName[0]}
                 </div>
                 <span className="font-bebas text-[#f5c518] tracking-[0.3em] text-lg">PLAYER PACK</span>
-                <span className="font-inter text-white/40 text-xs">2025/26 SEASON</span>
+                <span className="font-inter text-white/60 text-xs">2025/26 SEASON</span>
               </motion.div>
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
@@ -82,7 +82,7 @@ export default function PackOpening() {
                 </div>
                 <span className="font-bebas text-3xl text-white tracking-wide mt-2">{PERSONAL.name.toUpperCase()}</span>
                 <span className="font-inter text-[#f5c518] text-xs tracking-[0.25em]">{PERSONAL.role.toUpperCase()}</span>
-                <span className="font-inter text-white/40 text-xs">{PERSONAL.club}</span>
+                <span className="font-inter text-white/60 text-xs">{PERSONAL.club}</span>
               </motion.div>
               <motion.span
                 initial={{ opacity: 0 }}

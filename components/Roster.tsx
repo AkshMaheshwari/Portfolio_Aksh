@@ -9,7 +9,7 @@ function StarRating({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className={i < count ? 'text-[#f5c518]' : 'text-white/20'}>
+        <span key={i} className={i < count ? 'text-[#f5c518]' : 'text-white/40'}>
           ★
         </span>
       ))}
@@ -51,9 +51,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <div className="card-face card-shimmer w-full h-full bg-[#0d1f14] border border-[#ffffff18] rounded-xl p-6 flex flex-col group-hover:border-[#f5c518]/40 group-hover:shadow-[0_0_28px_rgba(245,197,24,0.12)] transition-all cursor-pointer">
           {/* Header */}
           <div className="mb-4">
-            <div className="font-bebas text-2xl text-white tracking-wide leading-none mb-1">
+            <h3 className="font-bebas text-2xl text-white tracking-wide leading-none mb-1">
               {project.name}
-            </div>
+            </h3>
             <div className="font-inter text-xs text-[#f5c518] tracking-wide">{project.role}</div>
           </div>
 
@@ -76,9 +76,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           {/* Footer */}
           <div className="mt-4 pt-4 border-t border-[#ffffff10] flex items-center justify-between">
-            <span className="text-white/30 text-xs font-inter hidden sm:block">Hover to flip</span>
-            <span className="text-white/30 text-xs font-inter sm:hidden">Tap to flip</span>
-            <span className="text-white/30 text-xs font-mono">{project.techCount} techs</span>
+            <span className="text-white/60 text-xs font-inter hidden sm:block">Hover to flip</span>
+            <span className="text-white/60 text-xs font-inter sm:hidden">Tap to flip</span>
+            <span className="text-white/60 text-xs font-mono">{project.techCount} techs</span>
           </div>
         </div>
 
@@ -104,7 +104,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           {/* Tech stack */}
           <div className="mt-3 pt-3 border-t border-[#ffffff18]">
-            <div className="font-mono text-[10px] text-white/30 tracking-widest mb-2">BUILT WITH</div>
+            <div className="font-mono text-[10px] text-white/60 tracking-widest mb-2">BUILT WITH</div>
             <div className="flex flex-wrap gap-1.5">
               {project.techStack.map((tech) => (
                 <span

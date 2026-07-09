@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, useInView, useReducedMotion, useMotionValue, animate } from 'framer-motion';
+import Image from 'next/image';
 import { FORMATIONS, BENCH_PLAYERS } from '@/lib/data';
 import type { Player } from '@/types';
 
@@ -103,6 +104,17 @@ function PlayerNode({ player, index, inView, reducedMotion, svgRef, onHover, onL
       onMouseEnter={() => { if (!dragging.current) onHover(player); }}
       onMouseLeave={onLeave}
       onClick={(e) => { if (!moved.current) onSelect(e, player); }}
+      role="button"
+      tabIndex={0}
+      aria-label={`${player.name}, ${positionLabel[player.position]}, rating ${player.rating}`}
+      onFocus={() => onHover(player)}
+      onBlur={onLeave}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect(e as unknown as React.MouseEvent, player);
+        }
+      }}
     >
       <motion.g
         initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
@@ -229,7 +241,10 @@ export default function FormationBoard() {
             viewBox={`0 0 ${PITCH_W} ${PITCH_H}`}
             className="w-full rounded-xl overflow-visible"
             style={{ filter: 'drop-shadow(0 0 40px rgba(26,58,36,0.5))' }}
+            role="group"
+            aria-label={`${currentFormation.label} tactical formation pitch. Each player is a focusable button revealing skill rating and experience.`}
           >
+            <title>{`${currentFormation.label} tactical skill formation`}</title>
             <defs>
               <linearGradient id="pitchGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#1a5c2a" />
@@ -379,7 +394,13 @@ export default function FormationBoard() {
               >
                 <div className="w-12 h-12 rounded-full bg-[#1a3a24] border-2 border-[#f5c518]/40 group-hover:border-[#f5c518] transition-colors flex items-center justify-center mx-auto mb-2 overflow-hidden">
                   {player.iconUrl ? (
-                    <img src={player.iconUrl} alt={player.name} className="w-7 h-7 object-contain" />
+                    <Image
+                      src={player.iconUrl}
+                      alt={player.name}
+                      width={28}
+                      height={28}
+                      className="w-7 h-7 object-contain"
+                    />
                   ) : (
                     <span className="text-[#f5c518] text-xs font-mono font-bold">{player.icon}</span>
                   )}

@@ -116,22 +116,22 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
       <div className="flex-1 min-w-0">
         <motion.div variants={contentVariants}>
           {/* Club name */}
-          <div
+          <h3
             className="font-bebas text-xl sm:text-2xl tracking-wide leading-none mb-0.5"
             style={{ color: entry.isCurrent ? '#4ade80' : 'white' }}
           >
             {entry.club}
             {entry.isCurrent && (
-              <span className="ml-2 text-xs sm:text-sm text-green-400/60 font-inter normal-case">
+              <span className="ml-2 text-xs sm:text-sm text-green-400/80 font-inter normal-case">
                 ← Current
               </span>
             )}
-          </div>
+          </h3>
 
           {/* Role + date + badge all inline */}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
             <span className="font-inter text-white/60 text-sm">{entry.role}</span>
-            <span className="font-mono text-white/40 text-xs">{entry.startYear} — {entry.endYear}</span>
+            <span className="font-mono text-white/60 text-xs">{entry.startYear} — {entry.endYear}</span>
           </div>
         </motion.div>
 
